@@ -1,11 +1,8 @@
-import "./App.css";
-
 const App = () => {
   return (
     <div className="App">
-      <header className="App-header">
-        <button onClick={callApi}>Call API</button>
-      </header>
+      <input type="text" />
+      <button onClick={callApi}>Call API</button>
     </div>
   );
 };

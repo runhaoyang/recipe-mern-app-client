@@ -1,6 +1,6 @@
 import "./App.css";
 
-function App() {
+const App = () => {
   return (
     <div className="App">
       <header className="App-header">
@@ -8,10 +8,10 @@ function App() {
       </header>
     </div>
   );
-}
+};
 
 function callApi() {
-  fetch("https://recipe-mern-app-server.herokuapp.com", { method: "GET" })
+  fetch("https://recipe-mern-app-server.herokuapp.com/", { method: "GET" })
     .then((data) => data.json())
     .then((json) => console.log(json));
 }

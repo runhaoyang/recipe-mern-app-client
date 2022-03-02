@@ -11,7 +11,7 @@ function App() {
 }
 
 function callApi() {
-  fetch("http://localhost:5000/details", { method: "GET" })
+  fetch("https://recipe-mern-app-server.herokuapp.com", { method: "GET" })
     .then((data) => data.json())
     .then((json) => console.log(json));
 }

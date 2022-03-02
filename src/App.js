@@ -12,7 +12,13 @@ const App = () => {
 
 const callApi = async () => {
   const response = await fetch(
-    "https://recipe-mern-app-server.herokuapp.com/details"
+    "https://recipe-mern-app-server.herokuapp.com/details",
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    }
   );
   const json = await response.json();
   console.log(json);

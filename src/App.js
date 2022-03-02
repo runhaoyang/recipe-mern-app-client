@@ -10,14 +10,10 @@ const App = () => {
   );
 };
 
-const callApi = () => {
-  fetch("https://recipe-mern-app-server.herokuapp.com/", {
-    headers: {
-      accept: "Accept: application/json",
-    },
-  })
-    .then((data) => data.json())
-    .then((json) => console.log(json));
+const callApi = async () => {
+  const response = await fetch("https://recipe-mern-app-server.herokuapp.com/");
+  const json = await response.json();
+  console.log(json);
 };
 
 export default App;

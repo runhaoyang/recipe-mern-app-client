@@ -2,7 +2,7 @@ const App = () => {
   return (
     <div className="App">
       <input type="text" />
-      <button onClick={callApi}>Call API</button>
+      <button onClick={callApi}>Call API.</button>
     </div>
   );
 };

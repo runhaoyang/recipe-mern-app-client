@@ -10,10 +10,14 @@ const App = () => {
   );
 };
 
-function callApi() {
-  fetch("https://recipe-mern-app-server.herokuapp.com/", { method: "GET" })
+const callApi = () => {
+  fetch("https://recipe-mern-app-server.herokuapp.com/", {
+    headers: {
+      accept: "Accept: application/json",
+    },
+  })
     .then((data) => data.json())
     .then((json) => console.log(json));
-}
+};
 
 export default App;

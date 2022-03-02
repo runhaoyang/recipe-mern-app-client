@@ -20,8 +20,7 @@ const callApi = async () => {
       },
     }
   );
-  const json = await response.json();
-  console.log(json);
+  console.log(response);
 };
 
 export default App;

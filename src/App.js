@@ -4,6 +4,8 @@ import Axios from "axios";
 const App = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   const handleOnChangeUsername = (e) => {
     setUsername(e.target.value);
@@ -20,10 +22,14 @@ const App = () => {
         username: username,
         password: password,
       }).then(() => {
+        setSuccessMessage("User successfully created");
         setUsername("");
         setPassword("");
+        setErrorMessage("");
       });
     } catch (err) {
+      setSuccessMessage("");
+      setErrorMessage("User already exists");
       console.error(`The error is ${err}`);
     }
   };
@@ -55,6 +61,8 @@ const App = () => {
         </div>
         <button>Register</button>
       </form>
+      <div>{successMessage}</div>
+      <div>{errorMessage}</div>
     </div>
   );
 };

@@ -1,84 +1,46 @@
-import { useState } from "react";
-import Axios from "axios";
+import "./App.css";
+import { HashRouter, Routes, Route, Link } from "react-router-dom";
+import Home from "./components/Home";
+import Login from "./components/Login";
+import Recipes from "./components/Recipes";
+import Register from "./components/Register";
 
 const App = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
-
-  const handleOnChangeUsername = (e) => {
-    setUsername(e.target.value);
-  };
-
-  const handleOnChangePassword = (e) => {
-    setPassword(e.target.value);
-  };
-
-  const handleOnSubmit = async (event) => {
-    event.preventDefault();
-    try {
-      await Axios.post("https://recipe-mern-app-server.herokuapp.com/users", {
-        username: username,
-        password: password,
-      }).then(() => {
-        setSuccessMessage("User successfully created");
-        setUsername("");
-        setPassword("");
-        setErrorMessage("");
-      });
-    } catch (err) {
-      setSuccessMessage("");
-      setErrorMessage("User already exists");
-      console.error(`The error is ${err}`);
-    }
-  };
-
   return (
     <div className="App">
-      <div>
-        <button onClick={callApi}>Get all users</button>
-      </div>
-      <br />
-      <br />
-      <form action="#" onSubmit={handleOnSubmit}>
-        <div>
-          Username:{" "}
-          <input
-            type="text"
-            placeholder=""
-            value={username}
-            onChange={handleOnChangeUsername}
-          />
+      <HashRouter>
+        <div className="navbarContainer">
+          <div className="navBar1">
+            <ul>
+              <li>
+                <Link to="/">Home</Link>
+              </li>
+              <li>
+                <Link to="/recipes">Recipes</Link>
+              </li>
+            </ul>
+          </div>
+          <div className="navBar2">
+            <ul>
+              <li>
+                <Link to="/login">Login</Link>
+              </li>
+              <li>
+                <Link to="/register">Register</Link>
+              </li>
+            </ul>
+          </div>
         </div>
-        <div>
-          Password:{" "}
-          <input
-            type="text"
-            value={password}
-            onChange={handleOnChangePassword}
-          />
-        </div>
-        <button>Register</button>
-      </form>
-      <div>{successMessage}</div>
-      <div>{errorMessage}</div>
+
+        <Routes>
+          <Route exact path="/" element={<Home />} />
+          <Route path="/recipes" element={<Recipes />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+        </Routes>
+      </HashRouter>
     </div>
   );
-};
-
-const callApi = async () => {
-  const response = await fetch(
-    "https://recipe-mern-app-server.herokuapp.com/users",
-    {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    }
-  );
-  const res = await response.json();
-  console.log(res);
 };
 
 export default App;

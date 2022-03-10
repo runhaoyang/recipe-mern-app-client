@@ -13,7 +13,7 @@ const RecipeItem = ({ item }) => {
           <img src={image} alt="" />
         </div>
         <div className="learnMore">
-          <a href="#">Learn More</a>
+          <a href="/#">Learn More</a>
         </div>
       </div>
     </>

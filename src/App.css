@@ -21,3 +21,31 @@
   list-style: none;
   width: 25%;
 }
+
+.recipeItems img {
+  max-width: 250px;
+  max-height: 250px;
+}
+
+.recipeItems {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: 1em;
+  row-gap: 1em;
+}
+
+.recipeItems div {
+  /* background-color: tomato; */
+  text-align: center;
+}
+
+.learnMore {
+  margin-top: 10px;
+}
+
+.learnMore a {
+  text-decoration: none;
+  border: 1px solid;
+  padding: 7px;
+  color: black;
+}

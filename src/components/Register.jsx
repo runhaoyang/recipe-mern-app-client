@@ -35,7 +35,7 @@ const Register = () => {
   };
 
   return (
-    <>
+    <div className="registerContent">
       <form action="#" onSubmit={handleOnSubmitRegister}>
         <div>
           Username:{" "}
@@ -60,7 +60,7 @@ const Register = () => {
         <div>{successMessage}</div>
         <div>{errorMessage}</div>
       </div>
-    </>
+    </div>
   );
 };
 

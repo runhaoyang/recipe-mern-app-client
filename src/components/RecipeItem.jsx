@@ -5,11 +5,10 @@ const RecipeItem = ({ item }) => {
 
   return (
     <>
-      <div>
-        <h3>
-          {name} <span>({category})</span>
-        </h3>
-        <div>
+      <div className="recipeItem">
+        <h3 className="recipeItems-name">{name}</h3>
+        {/* <span>{category}</span> */}
+        <div className="recipeItems-image-container">
           <img src={image} alt="" />
         </div>
         <div className="learnMore">

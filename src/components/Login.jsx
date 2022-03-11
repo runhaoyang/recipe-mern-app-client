@@ -35,7 +35,7 @@ const Login = () => {
   };
 
   return (
-    <>
+    <div className="loginContent">
       <form action="#" onSubmit={handleOnSubmitLogin}>
         <div>
           Username:{" "}
@@ -60,7 +60,7 @@ const Login = () => {
         <div>{successMessage}</div>
         <div>{errorMessage}</div>
       </div>
-    </>
+    </div>
   );
 };
 

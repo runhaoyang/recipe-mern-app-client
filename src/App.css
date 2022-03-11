@@ -1,10 +1,47 @@
+body {
+  margin: 0px 100px;
+  margin-bottom: 50px;
+  padding: 0px;
+}
+
+.navbarContainer {
+  overflow: hidden;
+  background-color: #333;
+  position: sticky;
+  top: 0;
+  width: 100%;
+}
+
+.registerContent,
+.loginContent {
+  margin-top: 50px;
+}
+
+.recipesHeader {
+  margin-top: 50px;
+}
+
+.recipeApp {
+  margin-top: 50px;
+}
+
+.navbar-ul li a:hover {
+  background-color: lightcoral;
+}
+
 .navbarContainer {
   display: flex;
   justify-content: space-between;
+  background-color: #333;
+}
+
+.navLinks {
+  color: #f2f2f2;
+  text-decoration: none;
 }
 
 .navBar1 {
-  width: 30%;
+  width: 20%;
 }
 
 .navBar2 {
@@ -21,30 +58,78 @@
   list-style: none;
   width: 25%;
 }
+.recipeItem {
+  border: 1px solid;
+  border-radius: 15px;
+}
 
 .recipeItems img {
-  max-width: 250px;
-  max-height: 250px;
+  max-width: 300px;
+  max-height: 300px;
+  flex-shrink: 0;
+  min-width: 100%;
+  min-height: 100%;
+}
+
+.recipeItems-image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
 }
 
 .recipeItems {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   column-gap: 1em;
   row-gap: 1em;
 }
 
 .recipeItems div {
   text-align: center;
+  /* background-color: powderblue; */
 }
 
 .learnMore {
-  margin-top: 10px;
+  margin-top: 7px;
+  /* margin-bottom: 7px; */
+  margin-bottom: 7px;
 }
 
 .learnMore a {
+  display: inline-block;
   text-decoration: none;
   border: 1px solid;
-  padding: 7px;
+  line-height: 27px;
+  padding-left: 15px;
+  padding-right: 15px;
   color: black;
+}
+
+.recipeItems-name {
+  margin-bottom: 5px;
+  margin-top: 5px;
+}
+
+.navBar-ul-2 > li {
+  float: right;
+  width: 50%;
+}
+
+.navbar-ul li a {
+  display: block;
+  /* line-height: 1.5em;
+  height: auto; */
+  line-height: 3em;
+  text-align: center;
+}
+
+.navbar-ul {
+  margin: 0px;
+  padding: 0px;
+  height: 3em;
+}
+.navbar-ul li {
+  padding: 0px;
+  margin: 0px;
 }

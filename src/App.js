@@ -11,22 +11,30 @@ const App = () => {
       <HashRouter>
         <div className="navbarContainer">
           <div className="navBar1">
-            <ul>
+            <ul className="navbar-ul">
               <li>
-                <Link to="/">Home</Link>
+                <Link className="navLinks" to="/">
+                  Home
+                </Link>
               </li>
               <li>
-                <Link to="/recipes">Recipes</Link>
+                <Link className="navLinks" to="/recipes">
+                  Recipes
+                </Link>
               </li>
             </ul>
           </div>
           <div className="navBar2">
-            <ul>
+            <ul className="navbar-ul">
               <li>
-                <Link to="/login">Login</Link>
+                <Link className="navLinks" to="/login">
+                  Login
+                </Link>
               </li>
               <li>
-                <Link to="/register">Register</Link>
+                <Link className="navLinks" to="/register">
+                  Register
+                </Link>
               </li>
             </ul>
           </div>

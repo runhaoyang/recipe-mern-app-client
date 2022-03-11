@@ -27,9 +27,8 @@ const Recipes = () => {
 
   return (
     <>
-      <div>
-        <button onClick={getRecipesArray}>Get recipes array</button>
-        <h2>List of recipes:</h2>
+      <div className="recipesHeader">
+        {/* <button onClick={getRecipesArray}>Get recipes array</button> */}
         <div className="recipeItems">{recipes}</div>
       </div>
     </>

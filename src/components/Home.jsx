@@ -6,6 +6,8 @@ const Home = () => {
   const [recipeArray, setRecipeArray] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [fetchingCompleted, setFetchingCompleted] = useState(false);
 
   const getAllUsers = async () => {
     const response = await fetch(
@@ -33,9 +35,9 @@ const Home = () => {
   };
 
   const sendRecipeToBackEnd = async () => {
-    try {
-      for (const recipe of recipeArray) {
-        console.log(recipe);
+    for (const recipe of recipeArray) {
+      console.log(recipe);
+      try {
         await Axios.post("http://localhost:5000/recipes", {
           idMeal: recipe.idMeal,
           strCategory: recipe.strCategory,
@@ -85,22 +87,38 @@ const Home = () => {
           strYoutube: recipe.strYoutube,
         }).then(() => {
           setSuccessMessage("Recipes successfully added to the database.");
+          setErrorMessage("");
+          console.log("Recipe successfully added to the database");
         });
+      } catch (err) {
+        console.error(`The error is ${err}`);
+        setErrorMessage("Some recipes already exist in the database.");
+        setSuccessMessage("");
       }
-    } catch (err) {
-      console.error(`The error is ${err}`);
-      setErrorMessage("Recipes not added to the database.");
     }
   };
 
   // @todo change ?f=a to a - z, and get all recipes into the database
   // use for loop and await within it
   const getRecipe = async () => {
-    const res = await Axios.get(
-      "https://www.themealdb.com/api/json/v1/1/search.php?f=a"
-    );
-    const arr = res.data.meals;
-    arr.forEach((recipe) => {
+    const arr = [];
+    let res;
+    try {
+      setIsLoading(true);
+      setFetchingCompleted(false);
+      for (let i = 65; i <= 70; i++) {
+        res = await Axios.get(
+          `https://www.themealdb.com/api/json/v1/1/search.php?f=${String.fromCharCode(
+            i
+          ).toLowerCase()}`
+        );
+        arr.push(res.data.meals);
+      }
+    } catch (err) {
+      console.log(`The error is ${err}`);
+    }
+    const concatArray = [].concat.apply([], arr);
+    concatArray.forEach((recipe) => {
       setRecipeArray((recipeArray) => [
         ...recipeArray,
         {
@@ -153,8 +171,12 @@ const Home = () => {
         },
       ]);
     });
+    console.log("Recipes successfully fetched.");
+    setIsLoading(false);
+    setFetchingCompleted(true);
   };
-  console.log(recipeArray);
+
+  //   console.log("Recipe Array: " + recipeArray);
   return (
     <>
       <div className="recipeApp">
@@ -162,8 +184,13 @@ const Home = () => {
         <div>
           <button onClick={getAllUsers}>Get all users</button>
           <button onClick={getAllRecipes}>Get all recipes</button>
-          <button onClick={getRecipe}>Get recipe</button>
+          <button onClick={getRecipe}>Get recipes</button>
           <button onClick={sendRecipeToBackEnd}>Send recipe to backend</button>
+        </div>
+        <br />
+        <div className="loadingMessage">
+          {isLoading ? <div>Fetching in progress... </div> : <div> </div>}
+          {fetchingCompleted && <div> Fetching recipes completed </div>}
         </div>
         <div className="messages">
           <div>{successMessage}</div>

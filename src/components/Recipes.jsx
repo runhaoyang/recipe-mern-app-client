@@ -11,7 +11,9 @@ const Recipes = () => {
   useEffect(() => {
     const getAllRecipes = async () => {
       try {
-        const response = await Axios.get("http://localhost:5000/recipes");
+        const response = await Axios.get(
+          "https://recipe-mern-app-server.herokuapp.com/recipes"
+        );
         setRecipeArray(response.data);
       } catch (err) {
         console.error(`The error is ${err}`);

@@ -14,19 +14,19 @@ body {
 
 .registerContent,
 .loginContent {
-  margin-top: 50px;
+  margin-top: 10px;
 }
 
 .recipesHeader {
-  margin-top: 50px;
+  margin-top: 10px;
 }
 
 .recipeApp {
-  margin-top: 50px;
+  margin-top: 10px;
 }
 
 .navbar-ul li a:hover {
-  background-color: lightcoral;
+  background-color: rgb(84, 87, 92);
 }
 
 .navbarContainer {
@@ -61,11 +61,15 @@ body {
 .recipeItem {
   border: 1px solid;
   border-radius: 15px;
+  max-width: 300px;
+  max-height: 300px;
+  margin-bottom: 10px;
+  margin-top: 10px;
 }
 
 .recipeItems img {
-  max-width: 300px;
-  max-height: 300px;
+  max-width: 200px;
+  max-height: 200px;
   flex-shrink: 0;
   min-width: 100%;
   min-height: 100%;
@@ -92,7 +96,6 @@ body {
 
 .learnMore {
   margin-top: 7px;
-  /* margin-bottom: 7px; */
   margin-bottom: 7px;
 }
 
@@ -109,6 +112,7 @@ body {
 .recipeItems-name {
   margin-bottom: 5px;
   margin-top: 5px;
+  min-height: 2.2em;
 }
 
 .navBar-ul-2 > li {
@@ -132,4 +136,39 @@ body {
 .navbar-ul li {
   padding: 0px;
   margin: 0px;
+}
+
+.pagination {
+  display: flex;
+  padding-left: 0;
+  list-style: none;
+}
+
+.page-link {
+  padding: 0.5rem 1rem;
+  position: relative;
+  display: block;
+  color: #0d6efd;
+  text-decoration: none;
+  background-color: rgb(255, 255, 255);
+  border: 1px solid #9c9fa1;
+}
+
+.selected {
+  background-color: lightgray;
+  cursor: pointer;
+}
+
+.not-selected {
+  cursor: pointer;
+}
+
+/* .page-link:hover {
+  background-color: lightgray;
+} */
+
+.pagination-nav {
+  padding-bottom: 2.5em;
+  position: fixed;
+  bottom: 0;
 }

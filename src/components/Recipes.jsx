@@ -6,7 +6,7 @@ import Pagination from "./Pagination";
 const Recipes = () => {
   const [recipeArray, setRecipeArray] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage, setPostsPerPage] = useState(8);
+  const [postsPerPage] = useState(8);
 
   useEffect(() => {
     const getAllRecipes = async () => {
@@ -20,9 +20,9 @@ const Recipes = () => {
     getAllRecipes();
   }, []);
 
-  const getRecipesArray = () => {
-    console.log(recipeArray);
-  };
+  //   const getRecipesArray = () => {
+  //     console.log(recipeArray);
+  //   };
 
   // Get current posts
   const indexOfLastPost = currentPage * postsPerPage;

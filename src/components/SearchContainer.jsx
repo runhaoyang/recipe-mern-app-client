@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 const SearchContainer = ({ recipeArray, setDisplayArray }) => {
   const handleTextOnChange = (e) => {
     filterArray(e.target.value);
@@ -14,23 +12,6 @@ const SearchContainer = ({ recipeArray, setDisplayArray }) => {
     }
     setDisplayArray(res);
   };
-
-  //   const handleTextOnChange = (e) => {
-  //     filterArray(e.target.value);
-  //   };
-
-  //   const filterArray = (value) => {
-  //     let filteredArray;
-  //     if (value === "" || value === " ") {
-  //       filteredArray = [];
-  //     } else {
-  //       filteredArray = recipeArray.filter((item) => {
-
-  //       });
-  //     }
-  //     console.log(filteredArray);
-  //     setDisplayArray(filteredArray);
-  //   };
 
   return (
     <div className="searchContainer">

@@ -3,9 +3,11 @@ import Axios from "axios";
 import RecipeItem from "./RecipeItem";
 import Pagination from "./Pagination";
 import Loading from "./Loading";
+import SearchContainer from "./SearchContainer";
 
 const Recipes = () => {
   const [recipeArray, setRecipeArray] = useState([]);
+  const [displayArray, setDisplayArray] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [postsPerPage] = useState(8);
@@ -19,6 +21,8 @@ const Recipes = () => {
         );
         setIsLoading(false);
         setRecipeArray(response.data);
+        //Duplicate recipe array for modifications in other to retain prior data
+        setDisplayArray(response.data);
       } catch (err) {
         console.error(`The error is ${err}`);
       }
@@ -33,7 +37,7 @@ const Recipes = () => {
   // Get current posts
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentRecipes = recipeArray.slice(indexOfFirstPost, indexOfLastPost);
+  const currentRecipes = displayArray.slice(indexOfFirstPost, indexOfLastPost);
 
   // Change page
   const paginate = (pageNumber) => {
@@ -50,10 +54,14 @@ const Recipes = () => {
         <Loading />
       ) : (
         <div className="recipesContainer">
+          <SearchContainer
+            recipeArray={recipeArray}
+            setDisplayArray={setDisplayArray}
+          />
           <div className="recipeItems">{recipes}</div>
           <Pagination
             postsPerPage={postsPerPage}
-            totalPosts={recipeArray.length}
+            totalPosts={displayArray.length}
             paginate={paginate}
             currentPage={currentPage}
           />

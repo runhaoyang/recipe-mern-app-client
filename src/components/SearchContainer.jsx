@@ -1,6 +1,7 @@
-const SearchContainer = ({ recipeArray, setDisplayArray }) => {
+const SearchContainer = ({ recipeArray, setDisplayArray, setCurrentPage }) => {
   const handleTextOnChange = (e) => {
     filterArray(e.target.value);
+    setCurrentPage(1);
   };
 
   const filterArray = (value) => {

@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
+import ReactPaginate from "react-paginate";
 import Axios from "axios";
 import RecipeItem from "./RecipeItem";
-import Pagination from "./Pagination";
 import Loading from "./Loading";
 import SearchContainer from "./SearchContainer";
+import RecipeItemModal from "./RecipeItemModal";
 
 const Recipes = () => {
   const [recipeArray, setRecipeArray] = useState([]);
@@ -11,6 +12,8 @@ const Recipes = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [postsPerPage] = useState(8);
+  const [modalState, setModalState] = useState(false);
+  const [currentRecipe, setCurrentRecipe] = useState({});
 
   useEffect(() => {
     const getAllRecipes = async () => {
@@ -19,10 +22,10 @@ const Recipes = () => {
         const response = await Axios.get(
           "https://recipe-mern-app-server.herokuapp.com/recipes"
         );
-        setIsLoading(false);
         setRecipeArray(response.data);
         //Duplicate recipe array for modifications in other to retain prior data
         setDisplayArray(response.data);
+        setIsLoading(false);
       } catch (err) {
         console.error(`The error is ${err}`);
       }
@@ -30,22 +33,26 @@ const Recipes = () => {
     getAllRecipes();
   }, []);
 
-  //   const getRecipesArray = () => {
-  //     console.log(recipeArray);
-  //   };
-
   // Get current posts
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentRecipes = displayArray.slice(indexOfFirstPost, indexOfLastPost);
 
   // Change page
-  const paginate = (pageNumber) => {
-    setCurrentPage(pageNumber);
+  // React-Paginate starts with page at 0 so we need to increment by 1
+  const paginate = ({ selected: pageNumber }) => {
+    setCurrentPage(pageNumber + 1);
   };
 
   const recipes = currentRecipes.map((item) => {
-    return <RecipeItem key={item.idMeal} item={item} />;
+    return (
+      <RecipeItem
+        key={item.idMeal}
+        item={item}
+        setModalState={setModalState}
+        setCurrentRecipe={setCurrentRecipe}
+      />
+    );
   });
 
   return (
@@ -54,17 +61,39 @@ const Recipes = () => {
         <Loading />
       ) : (
         <div className="recipesContainer">
+          {modalState && (
+            <RecipeItemModal
+              setModalState={setModalState}
+              currentRecipe={currentRecipe}
+            />
+          )}
           <SearchContainer
             recipeArray={recipeArray}
             setDisplayArray={setDisplayArray}
+            setCurrentPage={setCurrentPage}
           />
           <div className="recipeItems">{recipes}</div>
-          <Pagination
-            postsPerPage={postsPerPage}
-            totalPosts={displayArray.length}
-            paginate={paginate}
-            currentPage={currentPage}
-          />
+          {!modalState && (
+            <ReactPaginate
+              previousLabel={" <- Previous"}
+              nextLabel={"Next ->"}
+              pageCount={Math.ceil(displayArray.length / postsPerPage)}
+              onPageChange={paginate}
+              // React-Paginate starts at page 0, and we incremented by 1 in our onPageChange
+              forcePage={currentPage - 1}
+              pageClassName="page-item"
+              pageLinkClassName="page-link"
+              previousClassName="page-item"
+              previousLinkClassName="page-link"
+              nextClassName="page-item"
+              nextLinkClassName="page-link"
+              breakLabel="..."
+              breakClassName="page-item"
+              breakLinkClassName="page-link"
+              containerClassName="pagination"
+              activeClassName="selected"
+            />
+          )}
         </div>
       )}
     </>

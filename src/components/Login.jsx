@@ -6,6 +6,8 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [userToken, setUserToken] = useState("");
+  const [userInfo, setUserInfo] = useState([]);
 
   const handleOnChangeUsername = (e) => {
     setUsername(e.target.value);
@@ -21,15 +23,40 @@ const Login = () => {
       await Axios.post("http://localhost:5000/auth", {
         username: username,
         password: password,
-      }).then(() => {
-        setSuccessMessage("User successfully logged in.");
+      }).then((res) => {
         setUsername("");
         setPassword("");
         setErrorMessage("");
+        setUserToken(res.data.token);
+        getUserInfo(res.data.token);
       });
     } catch (err) {
       setSuccessMessage("");
       setErrorMessage("Invalid username or password");
+      console.error(`The error is ${err}`);
+    }
+  };
+
+  const getUserInfo = async (token) => {
+    console.log("inside the getUserInfo function");
+    try {
+      let data = {
+        headers: {
+          "x-auth-token": token,
+          "content-type": "application/json",
+        },
+      };
+      await Axios.get("http://localhost:5000/auth", data).then((res) => {
+        setSuccessMessage(
+          "User successfully logged in. User info has been obtained."
+        );
+        setErrorMessage("");
+        setUserInfo(res.data);
+        console.log(res.data);
+      });
+    } catch (err) {
+      setSuccessMessage("");
+      setErrorMessage("Error obtaining user info");
       console.error(`The error is ${err}`);
     }
   };
@@ -59,6 +86,12 @@ const Login = () => {
       <div className="messages">
         <div>{successMessage}</div>
         <div>{errorMessage}</div>
+      </div>
+      <div>
+        <h2>User token: {userToken}</h2>
+        <p>ID: {userInfo._id}</p>
+        <p>Username: {userInfo.username}</p>
+        <p>Password: {userInfo.password}</p>
       </div>
     </div>
   );

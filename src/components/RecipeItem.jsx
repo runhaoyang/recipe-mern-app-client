@@ -1,6 +1,11 @@
-const RecipeItem = ({ item }) => {
+const RecipeItem = ({ item, setModalState, setCurrentRecipe }) => {
   const name = item.strMeal;
   const image = item.strMealThumb;
+  const openModal = (e) => {
+    e.preventDefault();
+    setModalState(true);
+    setCurrentRecipe(item);
+  };
 
   return (
     <>
@@ -10,7 +15,9 @@ const RecipeItem = ({ item }) => {
           <img src={image} alt="" />
         </div>
         <div className="learnMore">
-          <a href="/#">Learn More</a>
+          <a href="/#" onClick={openModal}>
+            Learn More
+          </a>
         </div>
       </div>
     </>

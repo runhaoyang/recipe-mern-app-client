@@ -1,13 +1,14 @@
 import { useState } from "react";
 import Axios from "axios";
 
-const Home = () => {
+const Home = ({ isLoggedIn, userInfo }) => {
   // Array used to store all of the recipes that are fetched from an external API
   const [recipeArray, setRecipeArray] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [fetchingCompleted, setFetchingCompleted] = useState(false);
+  const username = userInfo.username;
 
   const getAllUsers = async () => {
     const response = await fetch(
@@ -190,6 +191,7 @@ const Home = () => {
   return (
     <>
       <div className="recipeApp">
+        <div>{isLoggedIn ? <h3> Welcome, {username} </h3> : null}</div>
         <h2>Recipe app</h2>
         <div>
           <button onClick={getAllUsers}>Get all users</button>

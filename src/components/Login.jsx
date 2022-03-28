@@ -1,13 +1,12 @@
 import { useState } from "react";
+import { Navigate } from "react-router-dom";
 import Axios from "axios";
 
-const Login = () => {
+const Login = ({ setUserInfo, setUserToken, setIsLoggedIn, isLoggedIn }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const [userToken, setUserToken] = useState("");
-  const [userInfo, setUserInfo] = useState([]);
 
   const handleOnChangeUsername = (e) => {
     setUsername(e.target.value);
@@ -28,7 +27,9 @@ const Login = () => {
         setPassword("");
         setErrorMessage("");
         setUserToken(res.data.token);
+        localStorage.setItem("userToken", res.data.token);
         getUserInfo(res.data.token);
+        setIsLoggedIn(true);
       });
     } catch (err) {
       setSuccessMessage("");
@@ -38,7 +39,6 @@ const Login = () => {
   };
 
   const getUserInfo = async (token) => {
-    console.log("inside the getUserInfo function");
     try {
       let data = {
         headers: {
@@ -52,6 +52,7 @@ const Login = () => {
         );
         setErrorMessage("");
         setUserInfo(res.data);
+        localStorage.setItem("userInfo", JSON.stringify(res.data));
         console.log(res.data);
       });
     } catch (err) {
@@ -62,38 +63,38 @@ const Login = () => {
   };
 
   return (
-    <div className="loginContent">
-      <form action="#" onSubmit={handleOnSubmitLogin}>
-        <div>
-          Username:{" "}
-          <input
-            type="text"
-            placeholder=""
-            value={username}
-            onChange={handleOnChangeUsername}
-          />
+    <>
+      {isLoggedIn === true ? (
+        <Navigate to="/" />
+      ) : (
+        <div className="loginContent">
+          <form action="#" onSubmit={handleOnSubmitLogin}>
+            <div>
+              Username:{" "}
+              <input
+                type="text"
+                placeholder=""
+                value={username}
+                onChange={handleOnChangeUsername}
+              />
+            </div>
+            <div>
+              Password:{" "}
+              <input
+                type="text"
+                value={password}
+                onChange={handleOnChangePassword}
+              />
+            </div>
+            <button>Log in </button>
+          </form>
+          <div className="messages">
+            <div>{successMessage}</div>
+            <div>{errorMessage}</div>
+          </div>
         </div>
-        <div>
-          Password:{" "}
-          <input
-            type="text"
-            value={password}
-            onChange={handleOnChangePassword}
-          />
-        </div>
-        <button>Log in </button>
-      </form>
-      <div className="messages">
-        <div>{successMessage}</div>
-        <div>{errorMessage}</div>
-      </div>
-      <div>
-        <h2>User token: {userToken}</h2>
-        <p>ID: {userInfo._id}</p>
-        <p>Username: {userInfo.username}</p>
-        <p>Password: {userInfo.password}</p>
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 

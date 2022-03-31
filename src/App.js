@@ -1,6 +1,6 @@
 import "./App.css";
-import { useState } from "react";
-import { HashRouter, Routes, Route, Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { HashRouter, Routes, Route, NavLink, Link } from "react-router-dom";
 import Home from "./components/Home";
 import Login from "./components/Login";
 import Logout from "./components/Logout";
@@ -11,7 +11,18 @@ import MyCollection from "./components/MyCollection";
 const App = () => {
   const [userInfo, setUserInfo] = useState({});
   const [userToken, setUserToken] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(""); // @todo
+  const [isLoggedIn, setIsLoggedIn] = useState("");
+
+  useEffect(() => {
+    if (localStorage.getItem("userInfo")) {
+      const user = JSON.parse(localStorage.getItem("userInfo"));
+      const token = localStorage.getItem("userToken");
+      setUserToken(token);
+      setUserInfo(user);
+      setIsLoggedIn(true);
+    }
+  }, []);
+
   return (
     <div className="App">
       <HashRouter>
@@ -19,19 +30,19 @@ const App = () => {
           <div className="navBar1">
             <ul className="navbar-ul">
               <li>
-                <Link className="navLinks" to="/">
+                <NavLink to="/" className="navLinks">
                   Home
-                </Link>
+                </NavLink>
               </li>
               <li>
-                <Link className="navLinks" to="/recipes">
+                <NavLink className="navLinks" to="/recipes">
                   Recipes
-                </Link>
+                </NavLink>
               </li>
               <li>
-                <Link className="navLinks" to="/mycollection">
+                <NavLink className="navLinks" to="/mycollection">
                   My Collections
-                </Link>
+                </NavLink>
               </li>
             </ul>
           </div>
@@ -47,16 +58,16 @@ const App = () => {
 
               {!isLoggedIn ? (
                 <li>
-                  <Link className="navLinks" to="/login">
+                  <NavLink className="navLinks" to="/login">
                     Login
-                  </Link>
+                  </NavLink>
                 </li>
               ) : null}
 
               <li>
-                <Link className="navLinks" to="/register">
+                <NavLink className="navLinks" to="/register">
                   Register
-                </Link>
+                </NavLink>
               </li>
             </ul>
           </div>
@@ -68,7 +79,16 @@ const App = () => {
             path="/"
             element={<Home isLoggedIn={isLoggedIn} userInfo={userInfo} />}
           />
-          <Route path="/recipes" element={<Recipes />} />
+          <Route
+            path="/recipes"
+            element={
+              <Recipes
+                userInfo={userInfo}
+                setUserInfo={setUserInfo}
+                isLoggedIn={isLoggedIn}
+              />
+            }
+          />
           <Route path="/register" element={<Register />} />
           <Route
             path="/login"
@@ -89,6 +109,7 @@ const App = () => {
             path="/mycollection"
             element={
               <MyCollection
+                setUserInfo={setUserInfo}
                 userInfo={userInfo}
                 userToken={userToken}
                 isLoggedIn={isLoggedIn}

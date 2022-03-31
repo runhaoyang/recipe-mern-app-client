@@ -7,6 +7,7 @@ const Logout = ({ setIsLoggedIn }) => {
     setIsLoggedIn(false);
   }, []);
 
+  // Redirect to the home page after logging out
   return <>{<Navigate to="/" />}</>;
 };
 

@@ -187,18 +187,30 @@ const Home = ({ isLoggedIn, userInfo }) => {
     setFetchingCompleted(true);
   };
 
-  //   console.log("Recipe Array: " + recipeArray);
   return (
     <>
       <div className="recipeApp">
-        <div>{isLoggedIn ? <h3> Welcome, {username} </h3> : null}</div>
-        <h2>Recipe app</h2>
-        <div>
-          <button onClick={getAllUsers}>Get all users</button>
-          <button onClick={getAllRecipes}>Get all recipes</button>
-          <button onClick={getRecipe}>Get recipes</button>
-          <button onClick={sendRecipeToBackEnd}>Send recipe to backend</button>
-        </div>
+        {isLoggedIn ? (
+          <h3> Welcome, {username} </h3>
+        ) : (
+          <div className="loadingPage">
+            <h2>
+              This is the home page, please log in to access your collections
+            </h2>
+          </div>
+        )}
+        {/* Authentication access for admin only */}
+        {isLoggedIn && username === "admin" ? (
+          <div>
+            <h2>Admin functions</h2>
+            <button onClick={getAllUsers}>Get all users</button>
+            <button onClick={getAllRecipes}>Get all recipes</button>
+            <button onClick={getRecipe}>Get recipes</button>
+            <button onClick={sendRecipeToBackEnd}>
+              Send recipe to backend
+            </button>
+          </div>
+        ) : null}
         <br />
         <div className="loadingMessage">
           {isLoading ? <div>Fetching in progress... </div> : <div> </div>}

@@ -6,7 +6,7 @@ import Loading from "./Loading";
 import SearchContainer from "./SearchContainer";
 import RecipeItemModal from "./RecipeItemModal";
 
-const Recipes = () => {
+const Recipes = ({ userInfo, setUserInfo, isLoggedIn }) => {
   const [recipeArray, setRecipeArray] = useState([]);
   const [displayArray, setDisplayArray] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -58,13 +58,16 @@ const Recipes = () => {
   return (
     <>
       {isLoading ? (
-        <Loading />
+        <Loading source={"recipes"} />
       ) : (
         <div className="recipesContainer">
           {modalState && (
             <RecipeItemModal
               setModalState={setModalState}
               currentRecipe={currentRecipe}
+              userInfo={userInfo}
+              setUserInfo={setUserInfo}
+              isLoggedIn={isLoggedIn}
             />
           )}
           <SearchContainer

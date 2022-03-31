@@ -1,6 +1,13 @@
 import { useState, useEffect } from "react";
+import Axios from "axios";
 
-const RecipeItemModal = ({ setModalState, currentRecipe }) => {
+const RecipeItemModal = ({
+  setModalState,
+  currentRecipe,
+  userInfo,
+  setUserInfo,
+  isLoggedIn,
+}) => {
   const {
     strMeal: name,
     strCategory: category,
@@ -57,6 +64,41 @@ const RecipeItemModal = ({ setModalState, currentRecipe }) => {
       return item;
     });
 
+  const addToCollection = async () => {
+    if (!isLoggedIn) {
+      console.log("User needs to be logged in to perform this action.");
+      return;
+    }
+    try {
+      await Axios.post(
+        "https://recipe-mern-app-server.herokuapp.com/recipes/exists",
+        {
+          username: userInfo.username,
+          recipes: currentRecipe,
+        }
+      ).then(async (res) => {
+        if (res.data === "doesNotExist") {
+          await Axios.post(
+            "https://recipe-mern-app-server.herokuapp.com/recipes/save",
+            {
+              username: userInfo.username,
+              recipes: currentRecipe,
+            }
+          ).then((res) => {
+            console.log(res.data.recipes);
+            setUserInfo(res.data);
+            console.log("Recipe successfully added to the user's collections.");
+          });
+        } else {
+          console.log("FRONTEND: Recipe already exists in user's collections.");
+        }
+      });
+    } catch (err) {
+      console.error(`The error is ${err}`);
+      console.log(err.response.data.message);
+    }
+  };
+
   useEffect(() => {
     for (let i = 1; i <= 20; i++) {
       if (
@@ -85,7 +127,7 @@ const RecipeItemModal = ({ setModalState, currentRecipe }) => {
             <button onClick={() => setModalState(false)}>Close</button>
           </div>
           <div className="modalCollectionButton">
-            <button>Add to my collections</button>
+            <button onClick={addToCollection}>Add to my collections</button>
           </div>
         </div>
         <div className="modalHeader">
@@ -98,7 +140,6 @@ const RecipeItemModal = ({ setModalState, currentRecipe }) => {
             <div className="modalPicture">
               <img src={image} alt="" />
             </div>
-            {console.log(currentRecipe)}
           </div>
           <div className="modalIngredients">
             <div className="modalIngredientsOne">{groups[0]}</div>
@@ -110,7 +151,6 @@ const RecipeItemModal = ({ setModalState, currentRecipe }) => {
 
         <div className="modalBody">
           <div className="modalInstructions">{instructionsList}</div>
-          {console.log(instructionsList)}
         </div>
       </div>
     </div>

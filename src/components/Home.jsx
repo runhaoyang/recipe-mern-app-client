@@ -191,7 +191,9 @@ const Home = ({ isLoggedIn, userInfo }) => {
     <>
       <div className="recipeApp">
         {isLoggedIn ? (
-          <h3> Welcome, {username} </h3>
+          <>
+            <h3> Welcome, {username} </h3>
+          </>
         ) : (
           <div className="loadingPage">
             <h2>

@@ -13,6 +13,13 @@ button {
 .registerContent,
 .loginContent {
   margin-top: 10px;
+  width: 50%;
+  margin: auto;
+  margin-top: 15%;
+  text-align: center;
+  border-radius: 10px;
+  -webkit-box-shadow: 0px 0px 8px 0px #000000;
+  box-shadow: 0px 0px 8px 0px #000000;
 }
 
 .recipesContainer {
@@ -95,6 +102,7 @@ button {
   grid-template-columns: repeat(4, 1fr);
   column-gap: 3em;
   row-gap: 1em;
+  min-height: 60px;
 }
 
 .recipeItems div {
@@ -283,12 +291,17 @@ button {
   cursor: pointer;
 }
 
-.modalCollectionButton button {
+.modalCollectionAddButton button {
   padding: 0.5em;
   cursor: pointer;
   background-color: lightgreen;
 }
 
+.modalCollectionDeleteButton button {
+  padding: 0.5em;
+  cursor: pointer;
+  background-color: tomato;
+}
 .modalInstructionList {
   line-height: 2em;
   list-style: none;
@@ -308,4 +321,25 @@ button {
 
 .active {
   background-color: steelblue;
+}
+
+.usernameField {
+  /* background-color: teal; */
+  padding-top: 2em;
+  padding-left: 1em;
+  padding-right: 1em;
+  padding-bottom: 1em;
+}
+
+.passwordField {
+  /* background-color: tomato; */
+  padding: 1em;
+}
+
+.submitField {
+  /* background-color: violet; */
+  padding-top: 1em;
+  padding-left: 1em;
+  padding-right: 1em;
+  padding-bottom: 2em;
 }

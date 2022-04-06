@@ -1,9 +1,12 @@
 import { useState, useEffect } from "react";
 import ReactPaginate from "react-paginate";
+import Axios from "axios";
 import RecipeItem from "./RecipeItem";
 import Loading from "./Loading";
 import SearchContainer from "./SearchContainer";
 import RecipeItemModal from "./RecipeItemModal";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const MyCollection = ({ setUserInfo, userInfo, userToken, isLoggedIn }) => {
   const [recipeArray, setRecipeArray] = useState([]);
@@ -13,32 +16,41 @@ const MyCollection = ({ setUserInfo, userInfo, userToken, isLoggedIn }) => {
   const [postsPerPage] = useState(8);
   const [modalState, setModalState] = useState(false);
   const [currentRecipe, setCurrentRecipe] = useState({});
+  const [usersCollection, setUsersCollection] = useState({});
+  const [currentComponent] = useState("collections");
 
   useEffect(() => {
-    const getAllRecipes = async () => {
-      if (!isLoggedIn) {
-        return;
-      }
+    if (!isLoggedIn) {
+      return;
+    }
+    const getUsersRecipes = async () => {
       try {
         setIsLoading(true);
-        setRecipeArray(userInfo.recipes);
-        //Duplicate recipe array for modifications in other to retain prior data
-        setDisplayArray(userInfo.recipes);
-        setIsLoading(false);
+        await Axios.post("http://localhost:5000/users/recipes", {
+          username: userInfo.username,
+        }).then((response) => {
+          setRecipeArray(response.data.recipes);
+          setDisplayArray(response.data.recipes);
+          setUsersCollection(response.data);
+          setIsLoading(false);
+        });
       } catch (err) {
         console.error(`The error is ${err}`);
       }
     };
-    getAllRecipes();
-  }, []);
+    getUsersRecipes();
+  }, [userInfo]);
 
   // Loading message for either requiring login or empty array to access my collections
   let loadingMessage = "";
   if (!isLoggedIn) {
     loadingMessage = "collections";
-  } else if (userInfo.recipes.length === 0) {
-    loadingMessage = "collectionsEmptyArray";
+  } else if (isLoading) {
+    loadingMessage = "recipes";
   }
+  // else if (displayArray.length === 0) {
+  //   loadingMessage = "collectionsEmptyArray";
+  // }
 
   // Get current posts
   const indexOfLastPost = currentPage * postsPerPage;
@@ -64,7 +76,7 @@ const MyCollection = ({ setUserInfo, userInfo, userToken, isLoggedIn }) => {
 
   return (
     <>
-      {loadingMessage.length > 0 ? (
+      {loadingMessage ? (
         <Loading source={loadingMessage} />
       ) : (
         <div className="recipesContainer">
@@ -72,9 +84,14 @@ const MyCollection = ({ setUserInfo, userInfo, userToken, isLoggedIn }) => {
             <RecipeItemModal
               setModalState={setModalState}
               currentRecipe={currentRecipe}
-              userInfo={userInfo}
+              userInfo={usersCollection}
               setUserInfo={setUserInfo}
               isLoggedIn={isLoggedIn}
+              displayArray={displayArray}
+              postsPerPage={postsPerPage}
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+              currentComponent={currentComponent}
             />
           )}
           <SearchContainer
@@ -82,30 +99,37 @@ const MyCollection = ({ setUserInfo, userInfo, userToken, isLoggedIn }) => {
             setDisplayArray={setDisplayArray}
             setCurrentPage={setCurrentPage}
           />
-          <div className="recipeItems">{recipes}</div>
-          {!modalState && (
-            <ReactPaginate
-              previousLabel={" <- Previous"}
-              nextLabel={"Next ->"}
-              pageCount={Math.ceil(displayArray.length / postsPerPage)}
-              onPageChange={paginate}
-              // React-Paginate starts at page 0, and we incremented by 1 in our onPageChange
-              forcePage={currentPage - 1}
-              pageClassName="page-item"
-              pageLinkClassName="page-link"
-              previousClassName="page-item"
-              previousLinkClassName="page-link"
-              nextClassName="page-item"
-              nextLinkClassName="page-link"
-              breakLabel="..."
-              breakClassName="page-item"
-              breakLinkClassName="page-link"
-              containerClassName="pagination"
-              activeClassName="selected"
-            />
+          {displayArray.length === 0 ? (
+            <Loading source={"collectionsEmptyArray"} />
+          ) : (
+            <>
+              <div className="recipeItems">{recipes}</div>
+              {!modalState && (
+                <ReactPaginate
+                  previousLabel={" <- Previous"}
+                  nextLabel={"Next ->"}
+                  pageCount={Math.ceil(displayArray.length / postsPerPage)}
+                  onPageChange={paginate}
+                  // React-Paginate starts at page 0, and we incremented by 1 in our onPageChange
+                  forcePage={currentPage - 1}
+                  pageClassName="page-item"
+                  pageLinkClassName="page-link"
+                  previousClassName="page-item"
+                  previousLinkClassName="page-link"
+                  nextClassName="page-item"
+                  nextLinkClassName="page-link"
+                  breakLabel="..."
+                  breakClassName="page-item"
+                  breakLinkClassName="page-link"
+                  containerClassName="pagination"
+                  activeClassName="selected"
+                />
+              )}
+            </>
           )}
         </div>
       )}
+      <ToastContainer />
     </>
   );
 };

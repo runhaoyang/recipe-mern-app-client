@@ -5,6 +5,8 @@ import RecipeItem from "./RecipeItem";
 import Loading from "./Loading";
 import SearchContainer from "./SearchContainer";
 import RecipeItemModal from "./RecipeItemModal";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Recipes = ({ userInfo, setUserInfo, isLoggedIn }) => {
   const [recipeArray, setRecipeArray] = useState([]);
@@ -14,18 +16,29 @@ const Recipes = ({ userInfo, setUserInfo, isLoggedIn }) => {
   const [postsPerPage] = useState(8);
   const [modalState, setModalState] = useState(false);
   const [currentRecipe, setCurrentRecipe] = useState({});
+  const [usersRecipeList, setUsersRecipeList] = useState(recipeArray);
 
   useEffect(() => {
     const getAllRecipes = async () => {
       try {
         setIsLoading(true);
-        const response = await Axios.get(
+        await Axios.get(
           "https://recipe-mern-app-server.herokuapp.com/recipes"
-        );
-        setRecipeArray(response.data);
-        //Duplicate recipe array for modifications in other to retain prior data
-        setDisplayArray(response.data);
-        setIsLoading(false);
+        ).then(async (response) => {
+          setRecipeArray(response.data);
+          //Duplicate recipe array for modifications in other to retain prior data
+          setDisplayArray(response.data);
+          if (!localStorage.getItem("userInfo")) {
+            setIsLoading(false);
+            return;
+          }
+          await Axios.post("http://localhost:5000/users/recipes", {
+            username: JSON.parse(localStorage.getItem("userInfo")).username,
+          }).then((res) => {
+            setUserInfo(res.data);
+            setIsLoading(false);
+          });
+        });
       } catch (err) {
         console.error(`The error is ${err}`);
       }
@@ -68,6 +81,7 @@ const Recipes = ({ userInfo, setUserInfo, isLoggedIn }) => {
               userInfo={userInfo}
               setUserInfo={setUserInfo}
               isLoggedIn={isLoggedIn}
+              // usersRecipeList = {usersRecipeList}
             />
           )}
           <SearchContainer
@@ -75,30 +89,37 @@ const Recipes = ({ userInfo, setUserInfo, isLoggedIn }) => {
             setDisplayArray={setDisplayArray}
             setCurrentPage={setCurrentPage}
           />
-          <div className="recipeItems">{recipes}</div>
-          {!modalState && (
-            <ReactPaginate
-              previousLabel={" <- Previous"}
-              nextLabel={"Next ->"}
-              pageCount={Math.ceil(displayArray.length / postsPerPage)}
-              onPageChange={paginate}
-              // React-Paginate starts at page 0, and we incremented by 1 in our onPageChange
-              forcePage={currentPage - 1}
-              pageClassName="page-item"
-              pageLinkClassName="page-link"
-              previousClassName="page-item"
-              previousLinkClassName="page-link"
-              nextClassName="page-item"
-              nextLinkClassName="page-link"
-              breakLabel="..."
-              breakClassName="page-item"
-              breakLinkClassName="page-link"
-              containerClassName="pagination"
-              activeClassName="selected"
-            />
+          {displayArray.length === 0 ? (
+            <Loading source={"collectionsEmptyArray"} />
+          ) : (
+            <>
+              <div className="recipeItems">{recipes}</div>
+              {!modalState && (
+                <ReactPaginate
+                  previousLabel={" <- Previous"}
+                  nextLabel={"Next ->"}
+                  pageCount={Math.ceil(displayArray.length / postsPerPage)}
+                  onPageChange={paginate}
+                  // React-Paginate starts at page 0, and we incremented by 1 in our onPageChange
+                  forcePage={currentPage - 1}
+                  pageClassName="page-item"
+                  pageLinkClassName="page-link"
+                  previousClassName="page-item"
+                  previousLinkClassName="page-link"
+                  nextClassName="page-item"
+                  nextLinkClassName="page-link"
+                  breakLabel="..."
+                  breakClassName="page-item"
+                  breakLinkClassName="page-link"
+                  containerClassName="pagination"
+                  activeClassName="selected"
+                />
+              )}
+            </>
           )}
         </div>
       )}
+      <ToastContainer />
     </>
   );
 };

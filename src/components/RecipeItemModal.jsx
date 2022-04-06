@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import Axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const RecipeItemModal = ({
   setModalState,
@@ -7,6 +9,11 @@ const RecipeItemModal = ({
   userInfo,
   setUserInfo,
   isLoggedIn,
+  displayArray,
+  postsPerPage,
+  currentPage,
+  setCurrentPage,
+  currentComponent,
 }) => {
   const {
     strMeal: name,
@@ -16,6 +23,7 @@ const RecipeItemModal = ({
   } = currentRecipe;
 
   const [recipeIngredientList, setRecipeIngredientList] = useState([]);
+  const [addOrDeleteButton, setAddOrDeleteButton] = useState("add");
 
   const capitalizeFirstLetter = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -66,7 +74,7 @@ const RecipeItemModal = ({
 
   const addToCollection = async () => {
     if (!isLoggedIn) {
-      console.log("User needs to be logged in to perform this action.");
+      notLoggedInNotification();
       return;
     }
     try {
@@ -85,17 +93,59 @@ const RecipeItemModal = ({
               recipes: currentRecipe,
             }
           ).then((res) => {
-            console.log(res.data.recipes);
             setUserInfo(res.data);
-            console.log("Recipe successfully added to the user's collections.");
+            successNotification();
+            setAddOrDeleteButton("delete");
           });
-        } else {
-          console.log("FRONTEND: Recipe already exists in user's collections.");
         }
       });
     } catch (err) {
       console.error(`The error is ${err}`);
       console.log(err.response.data.message);
+      errorNotification();
+    }
+  };
+
+  const deleteFromCollection = async () => {
+    if (!isLoggedIn) {
+      console.log("User needs to be logged in to perform this action.");
+      return;
+    }
+    try {
+      await Axios.post("http://localhost:5000/recipes/delete", {
+        username: userInfo.username,
+        recipes: currentRecipe,
+      }).then(async () => {
+        await Axios.post("http://localhost:5000/users/recipes", {
+          username: userInfo.username,
+        }).then((res) => {
+          deleteNotification();
+          setUserInfo(res.data);
+          setAddOrDeleteButton("add");
+          // If the parent component is MyCollection
+          if (currentComponent === "collections") {
+            // If while deleting a recipe from a page, it is the only recipe left on that page, we need to navigate to another page based on conditionals below
+            if ((displayArray.length - 1) % postsPerPage === 0) {
+              // If the current page is the first one, stay on the first page
+              if (currentPage === 1) {
+                setCurrentPage(1);
+              } else if (
+                // If the current page is the last page, or less than the last page, then stay on the current page
+                currentPage <= Math.floor(displayArray.length / postsPerPage)
+              ) {
+                setCurrentPage(currentPage);
+                // If the user is on a page where the recipe being deleted is the last one on the current page, then move to the previous page
+              } else {
+                setCurrentPage(currentPage - 1);
+              }
+            }
+          }
+          setModalState(false);
+        });
+      });
+    } catch (err) {
+      console.error(`The error is ${err}`);
+      console.log(err);
     }
   };
 
@@ -117,7 +167,39 @@ const RecipeItemModal = ({
         continue;
       }
     }
+    if (isLoggedIn) {
+      for (const recipes of userInfo.recipes) {
+        if (currentRecipe.idMeal === recipes.idMeal) {
+          setAddOrDeleteButton("delete");
+        }
+      }
+    }
   }, []);
+
+  const successNotification = () => {
+    toast.success("Recipe successfully added to my collections.", {
+      position: toast.POSITION.TOP_CENTER,
+      autoClose: 5000,
+    });
+  };
+
+  const errorNotification = () => {
+    toast.error("Recipe already exist in my collections.", {
+      position: toast.POSITION.TOP_CENTER,
+    });
+  };
+
+  const deleteNotification = () => {
+    toast.info("Recipe successfully deleted from my collections.", {
+      position: toast.POSITION.TOP_CENTER,
+    });
+  };
+
+  const notLoggedInNotification = () => {
+    toast.error("User needs to be logged in to perform this operation.", {
+      position: toast.POSITION.TOP_CENTER,
+    });
+  };
 
   return (
     <div className="modalBackground">
@@ -126,9 +208,18 @@ const RecipeItemModal = ({
           <div className="modalCloseButton">
             <button onClick={() => setModalState(false)}>Close</button>
           </div>
-          <div className="modalCollectionButton">
-            <button onClick={addToCollection}>Add to my collections</button>
-          </div>
+
+          {addOrDeleteButton === "add" ? (
+            <div className="modalCollectionAddButton">
+              <button onClick={addToCollection}>Add to my collections</button>
+            </div>
+          ) : (
+            <div className="modalCollectionDeleteButton">
+              <button onClick={deleteFromCollection}>
+                Delete from my collections
+              </button>
+            </div>
+          )}
         </div>
         <div className="modalHeader">
           <div className="modalTitle">
@@ -153,6 +244,7 @@ const RecipeItemModal = ({
           <div className="modalInstructions">{instructionsList}</div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

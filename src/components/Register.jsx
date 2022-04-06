@@ -1,11 +1,10 @@
 import { useState } from "react";
 import Axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
 
 const Register = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
 
   const handleOnChangeUsername = (e) => {
     setUsername(e.target.value);
@@ -22,22 +21,34 @@ const Register = () => {
         username: username,
         password: password,
       }).then(() => {
-        setSuccessMessage("User successfully created");
         setUsername("");
         setPassword("");
-        setErrorMessage("");
+        successRegistering();
       });
     } catch (err) {
-      setSuccessMessage("");
-      setErrorMessage("User already exists");
       console.error(`The error is ${err}`);
+      errorRegistering();
     }
+  };
+
+  const errorRegistering = () => {
+    toast.error("User already exists.", {
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 2000,
+    });
+  };
+
+  const successRegistering = () => {
+    toast.success("User successfully created.", {
+      position: toast.POSITION.TOP_CENTER,
+      autoClose: 2000,
+    });
   };
 
   return (
     <div className="registerContent">
       <form action="#" onSubmit={handleOnSubmitRegister}>
-        <div>
+        <div className="usernameField">
           Username:{" "}
           <input
             type="text"
@@ -46,7 +57,7 @@ const Register = () => {
             onChange={handleOnChangeUsername}
           />
         </div>
-        <div>
+        <div className="passwordField">
           Password:{" "}
           <input
             type="text"
@@ -54,12 +65,11 @@ const Register = () => {
             onChange={handleOnChangePassword}
           />
         </div>
-        <button>Register</button>
+        <div className="submitField">
+          <button>Register</button>
+        </div>
       </form>
-      <div className="messages">
-        <div>{successMessage}</div>
-        <div>{errorMessage}</div>
-      </div>
+      <ToastContainer limit={5} />
     </div>
   );
 };

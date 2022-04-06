@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
 import Axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
 
 const Login = ({ setUserInfo, setUserToken, setIsLoggedIn, isLoggedIn }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
 
   const handleOnChangeUsername = (e) => {
     setUsername(e.target.value);
@@ -25,15 +24,13 @@ const Login = ({ setUserInfo, setUserToken, setIsLoggedIn, isLoggedIn }) => {
       }).then((res) => {
         setUsername("");
         setPassword("");
-        setErrorMessage("");
         setUserToken(res.data.token);
         localStorage.setItem("userToken", res.data.token);
         getUserInfo(res.data.token);
         setIsLoggedIn(true);
       });
     } catch (err) {
-      setSuccessMessage("");
-      setErrorMessage("Invalid username or password");
+      errorLoggingIn();
       console.error(`The error is ${err}`);
     }
   };
@@ -47,19 +44,19 @@ const Login = ({ setUserInfo, setUserToken, setIsLoggedIn, isLoggedIn }) => {
         },
       };
       await Axios.get("http://localhost:5000/auth", data).then((res) => {
-        setSuccessMessage(
-          "User successfully logged in. User info has been obtained."
-        );
-        setErrorMessage("");
         setUserInfo(res.data);
         localStorage.setItem("userInfo", JSON.stringify(res.data));
-        console.log(res.data);
       });
     } catch (err) {
-      setSuccessMessage("");
-      setErrorMessage("Error obtaining user info");
       console.error(`The error is ${err}`);
     }
+  };
+
+  const errorLoggingIn = () => {
+    toast.error("Invalid username or password.", {
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 2000,
+    });
   };
 
   return (
@@ -69,7 +66,7 @@ const Login = ({ setUserInfo, setUserToken, setIsLoggedIn, isLoggedIn }) => {
       ) : (
         <div className="loginContent">
           <form action="#" onSubmit={handleOnSubmitLogin}>
-            <div>
+            <div className="usernameField">
               Username:{" "}
               <input
                 type="text"
@@ -78,7 +75,7 @@ const Login = ({ setUserInfo, setUserToken, setIsLoggedIn, isLoggedIn }) => {
                 onChange={handleOnChangeUsername}
               />
             </div>
-            <div>
+            <div className="passwordField">
               Password:{" "}
               <input
                 type="text"
@@ -86,12 +83,11 @@ const Login = ({ setUserInfo, setUserToken, setIsLoggedIn, isLoggedIn }) => {
                 onChange={handleOnChangePassword}
               />
             </div>
-            <button>Log in </button>
+            <div className="submitField">
+              <button>Log in </button>
+            </div>
           </form>
-          <div className="messages">
-            <div>{successMessage}</div>
-            <div>{errorMessage}</div>
-          </div>
+          <ToastContainer limit={5} />
         </div>
       )}
     </>

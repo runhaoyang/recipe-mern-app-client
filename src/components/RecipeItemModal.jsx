@@ -112,13 +112,19 @@ const RecipeItemModal = ({
       return;
     }
     try {
-      await Axios.post("http://localhost:5000/recipes/delete", {
-        username: userInfo.username,
-        recipes: currentRecipe,
-      }).then(async () => {
-        await Axios.post("http://localhost:5000/users/recipes", {
+      await Axios.post(
+        "https://recipe-mern-app-server.herokuapp.com/recipes/delete",
+        {
           username: userInfo.username,
-        }).then((res) => {
+          recipes: currentRecipe,
+        }
+      ).then(async () => {
+        await Axios.post(
+          "https://recipe-mern-app-server.herokuapp.com/users/recipes",
+          {
+            username: userInfo.username,
+          }
+        ).then((res) => {
           deleteNotification();
           setUserInfo(res.data);
           setAddOrDeleteButton("add");

@@ -22,14 +22,6 @@ const Loading = ({ source }) => {
     );
   }
 
-  /*
-  <div className="loadingPage">
-        <h2>
-          There are no recipes in your collections. Add one to see them here.
-        </h2>
-      </div>
-      */
-
   return <div>{message}</div>;
 };
 

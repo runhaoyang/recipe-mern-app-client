@@ -26,9 +26,13 @@ const MyCollection = ({ setUserInfo, userInfo, userToken, isLoggedIn }) => {
     const getUsersRecipes = async () => {
       try {
         setIsLoading(true);
-        await Axios.post("http://localhost:5000/users/recipes", {
-          username: userInfo.username,
-        }).then((response) => {
+
+        await Axios.post(
+          "https://recipe-mern-app-server.herokuapp.com/users/recipes",
+          {
+            username: userInfo.username,
+          }
+        ).then((response) => {
           setRecipeArray(response.data.recipes);
           setDisplayArray(response.data.recipes);
           setUsersCollection(response.data);

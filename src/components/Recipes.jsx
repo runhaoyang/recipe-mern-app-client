@@ -32,9 +32,12 @@ const Recipes = ({ userInfo, setUserInfo, isLoggedIn }) => {
             setIsLoading(false);
             return;
           }
-          await Axios.post("http://localhost:5000/users/recipes", {
-            username: JSON.parse(localStorage.getItem("userInfo")).username,
-          }).then((res) => {
+          await Axios.post(
+            "https://recipe-mern-app-server.herokuapp.com/users/recipes",
+            {
+              username: JSON.parse(localStorage.getItem("userInfo")).username,
+            }
+          ).then((res) => {
             setUserInfo(res.data);
             setIsLoading(false);
           });

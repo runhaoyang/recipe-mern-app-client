@@ -72,6 +72,7 @@ const Login = ({ setUserInfo, setUserToken, setIsLoggedIn, isLoggedIn }) => {
             <div className="usernameField">
               Username:{" "}
               <input
+                className="textInput"
                 type="text"
                 placeholder=""
                 value={username}
@@ -81,6 +82,7 @@ const Login = ({ setUserInfo, setUserToken, setIsLoggedIn, isLoggedIn }) => {
             <div className="passwordField">
               Password:{" "}
               <input
+                className="textInput"
                 type="text"
                 value={password}
                 onChange={handleOnChangePassword}

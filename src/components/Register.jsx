@@ -51,6 +51,7 @@ const Register = () => {
         <div className="usernameField">
           Username:{" "}
           <input
+            className="textInput"
             type="text"
             placeholder=""
             value={username}
@@ -60,7 +61,9 @@ const Register = () => {
         <div className="passwordField">
           Password:{" "}
           <input
+            className="textInput"
             type="text"
+            placeholder=""
             value={password}
             onChange={handleOnChangePassword}
           />

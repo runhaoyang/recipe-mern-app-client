@@ -17,7 +17,12 @@ const SearchContainer = ({ recipeArray, setDisplayArray, setCurrentPage }) => {
   return (
     <div className="searchContainer">
       <label htmlFor="searchBar">Search: </label>
-      <input type="text" id="searchBar" onChange={handleTextOnChange} />
+      <input
+        className="textInput"
+        type="text"
+        id="searchBar"
+        onChange={handleTextOnChange}
+      />
     </div>
   );
 };

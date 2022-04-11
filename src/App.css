@@ -27,13 +27,14 @@ button {
   min-height: 40em;
 }
 
-.recipeApp {
-  margin-top: 10px;
+.homePage h3 {
+  margin: 0px;
+  float: right;
 }
 
-/* .navbar-ul li a:hover {
-  background-color: steelblue;
-} */
+.adminFunctions {
+  margin-top: 0.5em;
+}
 
 .navbarContainer {
   display: flex;
@@ -346,4 +347,81 @@ button {
 
 .textInput {
   height: 2em;
+}
+
+.usersListContainer {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: 1em;
+  row-gap: 1em;
+  text-align: center;
+}
+
+.usersList {
+  /* background-color: tomato; */
+  -webkit-box-shadow: 0px 0px 3px 0px #000000;
+  box-shadow: 0px 0px 3px 0px #000000;
+  /* text-align: center; */
+  /* cursor: pointer; */
+}
+
+.usersListButton {
+  margin-bottom: 0.5em;
+  padding: 0.5em;
+  cursor: pointer;
+}
+
+.portal {
+  position: absolute;
+  background-color: rgb(253, 249, 249);
+  border: 1px solid #555;
+  left: 0;
+  right: 0;
+  margin: auto;
+  height: 80%;
+  top: 12%;
+  width: 45%;
+}
+
+.usersListTableContainer {
+  text-align: center;
+  width: 50%;
+  margin: auto;
+}
+
+.recipeListTableContainer {
+  text-align: center;
+}
+
+.usersTable {
+  border-left: 1px solid black;
+  border-top: 1px solid black;
+  border-spacing: 0;
+}
+
+.portalTable {
+  border-left: 1px solid black;
+  border-top: 1px solid black;
+  border-spacing: 0;
+  background-color: powderblue;
+  margin: auto;
+  margin-top: 4em;
+  /* position: absolute;
+  left: 0;
+  right: 0;
+  margin: auto;
+  height: 80%;
+  top: 15%;
+  width: 45%; */
+}
+
+th,
+td {
+  padding: 0.5rem;
+  border-bottom: 1px solid black;
+  border-right: 1px solid black;
+}
+
+thead tr:nth-child(even) th div {
+  cursor: pointer;
 }

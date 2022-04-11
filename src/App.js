@@ -1,5 +1,6 @@
 import "./App.css";
 import { useState, useEffect } from "react";
+import Axios from "axios";
 import { HashRouter, Routes, Route, NavLink, Link } from "react-router-dom";
 import Home from "./components/Home";
 import Login from "./components/Login";
@@ -13,13 +14,24 @@ const App = () => {
   const [userToken, setUserToken] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState("");
 
-  useEffect(() => {
+  useEffect(async () => {
     if (localStorage.getItem("userInfo")) {
       const user = JSON.parse(localStorage.getItem("userInfo"));
       const token = localStorage.getItem("userToken");
       setUserToken(token);
       setUserInfo(user);
       setIsLoggedIn(true);
+    }
+
+    // Initial call to backend to pre-load for faster loading to other components since the server is hosted on heroku which puts the app to sleep after 30minutes of inactivity
+    try {
+      await Axios.get(
+        "https://recipe-mern-app-server.herokuapp.com/users"
+      ).then((res) => {
+        console.log(res);
+      });
+    } catch (err) {
+      console.error(`The error is ${err}`);
     }
   }, []);
 

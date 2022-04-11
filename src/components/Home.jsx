@@ -1,27 +1,96 @@
-import { useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import Axios from "axios";
+import UsersListTable from "./UsersListTable";
+import RecipePortal from "./RecipePortal";
 
 const Home = ({ isLoggedIn, userInfo }) => {
-  // Array used to store all of the recipes that are fetched from an external API
+  // Array used to store all of the recipes that are fetched from an external API to then be used to store into mongoDB
   const [recipeArray, setRecipeArray] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [fetchingCompleted, setFetchingCompleted] = useState(false);
+  const [usersList, setUsersList] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [selectedRow, setSelectedRow] = useState([]);
   const username = userInfo.username;
 
-  const getAllUsers = async () => {
-    const response = await fetch(
-      "https://recipe-mern-app-server.herokuapp.com/users",
+  const columns = useMemo(
+    () => [
       {
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      }
-    );
-    const res = await response.json();
-    console.log(res);
+        Header: "Users List",
+        columns: [
+          {
+            Header: "Username",
+            accessor: "username",
+          },
+          {
+            Header: "ID",
+            accessor: "_id",
+          },
+          {
+            Header: "Recipes",
+            accessor: "recipes.length",
+          },
+          {
+            Header: "Action",
+            Cell: ({ row }) => (
+              <button onClick={() => openPortal(row)}> View Recipes</button>
+            ),
+          },
+        ],
+      },
+    ],
+    []
+  );
+
+  const modalColumns = useMemo(
+    () => [
+      {
+        Header: "Recipes List",
+        columns: [
+          {
+            Header: "ID",
+            accessor: "idMeal",
+          },
+          {
+            Header: "Recipe",
+            accessor: "strMeal",
+            maxWidth: 250,
+            minWidth: 250,
+            width: 100,
+          },
+        ],
+      },
+    ],
+    []
+  );
+
+  const openPortal = (row) => {
+    setOpen(true);
+    setSelectedRow(row);
+    // console.log(row);
+  };
+
+  useEffect(async () => {
+    await getAllUsers();
+  }, []);
+
+  const getAllUsers = async () => {
+    setIsLoading(true);
+    try {
+      await Axios.get(
+        "https://recipe-mern-app-server.herokuapp.com/users"
+      ).then((res) => {
+        setUsersList(res.data);
+        setIsLoading(false);
+      });
+    } catch (err) {
+      setIsLoading(false);
+      console.error(`The error is ${err}`);
+      setSuccessMessage("");
+      setErrorMessage("Error fetching users from backend.");
+    }
   };
 
   const getAllRecipes = async () => {
@@ -105,8 +174,6 @@ const Home = ({ isLoggedIn, userInfo }) => {
     }
   };
 
-  // @todo change ?f=a to a - z, and get all recipes into the database
-  // use for loop and await within it
   const getRecipe = async () => {
     const arr = [];
     let res;
@@ -189,7 +256,7 @@ const Home = ({ isLoggedIn, userInfo }) => {
 
   return (
     <>
-      <div className="recipeApp">
+      <div className="homePage">
         {isLoggedIn ? (
           <>
             <h3> Welcome, {username} </h3>
@@ -203,25 +270,46 @@ const Home = ({ isLoggedIn, userInfo }) => {
         )}
         {/* Authentication access for admin only */}
         {isLoggedIn && username === "admin" ? (
-          <div>
-            <h2>Admin functions</h2>
-            <button onClick={getAllUsers}>Get all users</button>
-            <button onClick={getAllRecipes}>Get all recipes</button>
-            <button onClick={getRecipe}>Get recipes</button>
-            <button onClick={sendRecipeToBackEnd}>
-              Send recipe to backend
-            </button>
-          </div>
+          <>
+            <div className="adminFunctions">
+              <button onClick={getAllUsers}>Get all users</button>
+              <button onClick={getAllRecipes}>Get all recipes</button>
+              <button onClick={getRecipe}>Get recipes</button>
+              <button onClick={sendRecipeToBackEnd}>
+                Send recipe to backend
+              </button>
+            </div>
+
+            <div className="loadingMessage">
+              {isLoading ? <div>Fetching in progress... </div> : null}
+              {fetchingCompleted && <div> Fetching recipes completed </div>}
+            </div>
+
+            <div className="messages">
+              <div>{successMessage}</div>
+              <div>{errorMessage}</div>
+            </div>
+            <br />
+            {usersList.length != 0 && (
+              <div className="usersListTableContainer">
+                <UsersListTable
+                  columns={columns}
+                  data={usersList}
+                  className="usersTable"
+                />
+              </div>
+            )}
+            <div className="portalContainer">
+              <RecipePortal
+                isOpen={open}
+                onClose={() => setOpen(false)}
+                selectedRow={selectedRow}
+                modalColumns={modalColumns}
+              />
+            </div>
+          </>
         ) : null}
         <br />
-        <div className="loadingMessage">
-          {isLoading ? <div>Fetching in progress... </div> : <div> </div>}
-          {fetchingCompleted && <div> Fetching recipes completed </div>}
-        </div>
-        <div className="messages">
-          <div>{successMessage}</div>
-          <div>{errorMessage}</div>
-        </div>
       </div>
     </>
   );

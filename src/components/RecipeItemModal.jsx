@@ -51,7 +51,7 @@ const RecipeItemModal = ({
   let instructionsList;
 
   // If the current recipe is a user submitted one then, render the instructions list without first parsing it through a function to split the string into sentences.
-  if (currentRecipe.hasOwnProperty("userSubmitted")) {
+  if (currentRecipe.userSubmitted) {
     image = `https://recipe-mern-app-server.herokuapp.com/${image}`;
     instructions = JSON.parse(instructions);
     instructionsList = instructions.map((list, index) => {

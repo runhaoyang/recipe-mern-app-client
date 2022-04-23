@@ -15,12 +15,7 @@ const RecipeItemModal = ({
   setCurrentPage,
   currentComponent,
 }) => {
-  const {
-    strMeal: name,
-    strCategory: category,
-    strMealThumb: image,
-    strInstructions: instructions,
-  } = currentRecipe;
+  const { strMeal: name, strCategory: category } = currentRecipe;
 
   const [recipeIngredientList, setRecipeIngredientList] = useState([]);
   const [addOrDeleteButton, setAddOrDeleteButton] = useState("add");
@@ -42,11 +37,24 @@ const RecipeItemModal = ({
     );
   });
 
-  const instructionsList = splitStringIntoSentence(instructions).map(
-    (list, index) => {
-      if (index === 0) {
-        list = " " + list;
-      }
+  let image;
+
+  if (currentRecipe.hasOwnProperty("strMealThumb")) {
+    image = currentRecipe.strMealThumb;
+  } else {
+    image = `uploads/2022-04-23-No-Image-Placeholder.svg.png`;
+  }
+
+  console.log(currentRecipe);
+
+  let instructions = currentRecipe.strInstructions;
+  let instructionsList;
+
+  // If the current recipe is a user submitted one then, render the instructions list without first parsing it through a function to split the string into sentences.
+  if (currentRecipe.hasOwnProperty("userSubmitted")) {
+    image = `https://recipe-mern-app-server.herokuapp.com/${image}`;
+    instructions = JSON.parse(instructions);
+    instructionsList = instructions.map((list, index) => {
       return (
         <div key={index}>
           <label className="modalLabel">
@@ -57,8 +65,26 @@ const RecipeItemModal = ({
           </label>
         </div>
       );
-    }
-  );
+    });
+  } else {
+    instructionsList = splitStringIntoSentence(instructions).map(
+      (list, index) => {
+        if (index === 0) {
+          list = " " + list;
+        }
+        return (
+          <div key={index}>
+            <label className="modalLabel">
+              <input type="checkBox" />
+              <li className="modalInstructionList" key={index}>
+                {list}
+              </li>
+            </label>
+          </div>
+        );
+      }
+    );
+  }
 
   // Split array into 5 parts for presentation
   const chunkSize = 5;
@@ -157,20 +183,22 @@ const RecipeItemModal = ({
 
   useEffect(() => {
     for (let i = 1; i <= 20; i++) {
-      if (
-        currentRecipe[`strIngredient${i}`] !== null &&
-        currentRecipe[`strIngredient${i}`].length > 0
-      ) {
-        setRecipeIngredientList((ingredientSet) => [
-          ...ingredientSet,
-          [
-            capitalizeFirstLetter(currentRecipe[`strIngredient${i}`]) +
-              ": " +
-              currentRecipe[`strMeasure${i}`],
-          ],
-        ]);
-      } else {
-        continue;
+      if (currentRecipe.hasOwnProperty(`strIngredient${i}`)) {
+        if (
+          currentRecipe[`strIngredient${i}`] !== null &&
+          currentRecipe[`strIngredient${i}`].length > 0
+        ) {
+          setRecipeIngredientList((ingredientSet) => [
+            ...ingredientSet,
+            [
+              capitalizeFirstLetter(currentRecipe[`strIngredient${i}`]) +
+                ": " +
+                currentRecipe[`strMeasure${i}`],
+            ],
+          ]);
+        } else {
+          continue;
+        }
       }
     }
     if (isLoggedIn) {

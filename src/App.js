@@ -8,13 +8,14 @@ import Logout from "./components/Logout";
 import Recipes from "./components/Recipes";
 import Register from "./components/Register";
 import MyCollection from "./components/MyCollection";
+import AddRecipe from "./components/AddRecipe";
 
 const App = () => {
   const [userInfo, setUserInfo] = useState({});
   const [userToken, setUserToken] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState("");
 
-  useEffect(async () => {
+  useEffect(() => {
     if (localStorage.getItem("userInfo")) {
       const user = JSON.parse(localStorage.getItem("userInfo"));
       const token = localStorage.getItem("userToken");
@@ -23,16 +24,19 @@ const App = () => {
       setIsLoggedIn(true);
     }
 
-    // Initial call to backend to pre-load for faster loading to other components since the server is hosted on heroku which puts the app to sleep after 30minutes of inactivity
-    try {
-      await Axios.get(
-        "https://recipe-mern-app-server.herokuapp.com/users"
-      ).then((res) => {
-        console.log(res);
-      });
-    } catch (err) {
-      console.error(`The error is ${err}`);
-    }
+    const fetchData = async () => {
+      // Initial call to backend to pre-load for faster loading to other components since the server is hosted on heroku which puts the app to sleep after 30minutes of inactivity
+      try {
+        await Axios.get(
+          "https://recipe-mern-app-server.herokuapp.com/users"
+        ).then((res) => {
+          console.log(res);
+        });
+      } catch (err) {
+        console.error(`The error is ${err}`);
+      }
+    };
+    fetchData();
   }, []);
 
   return (
@@ -54,6 +58,11 @@ const App = () => {
               <li>
                 <NavLink className="navLinks" to="/mycollection">
                   My Collections
+                </NavLink>
+              </li>
+              <li>
+                <NavLink className="navLinks" to="/addRecipe">
+                  Add Recipe
                 </NavLink>
               </li>
             </ul>
@@ -128,6 +137,10 @@ const App = () => {
               />
             }
           />
+          <Route
+            path="/addRecipe"
+            element={<AddRecipe userInfo={userInfo} isLoggedIn={isLoggedIn} />}
+          ></Route>
         </Routes>
       </HashRouter>
     </div>

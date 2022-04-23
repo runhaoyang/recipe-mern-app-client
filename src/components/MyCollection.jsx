@@ -5,7 +5,7 @@ import RecipeItem from "./RecipeItem";
 import Loading from "./Loading";
 import SearchContainer from "./SearchContainer";
 import RecipeItemModal from "./RecipeItemModal";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const MyCollection = ({ setUserInfo, userInfo, userToken, isLoggedIn }) => {

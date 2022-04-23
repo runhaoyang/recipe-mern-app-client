@@ -20,6 +20,21 @@ const Loading = ({ source }) => {
         <h2>No results found.</h2>
       </div>
     );
+  } else if (source === "addARecipe") {
+    message = (
+      <div className="loadingPage">
+        <h2>Please login to add a recipe.</h2>
+      </div>
+    );
+  } else if (source === "home") {
+    message = (
+      <div className="loadingPage">
+        <h2>
+          This is the home page. {<br />} Please log in to access your
+          collections, or to add a recipe.
+        </h2>
+      </div>
+    );
   }
 
   return <div>{message}</div>;

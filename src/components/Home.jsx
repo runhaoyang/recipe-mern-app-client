@@ -2,6 +2,8 @@ import { useMemo, useState, useEffect } from "react";
 import Axios from "axios";
 import UsersListTable from "./UsersListTable";
 import RecipePortal from "./RecipePortal";
+import Loading from "./Loading";
+import SubmittedRecipes from "./SubmittedRecipes";
 
 const Home = ({ isLoggedIn, userInfo }) => {
   // Array used to store all of the recipes that are fetched from an external API to then be used to store into mongoDB
@@ -13,7 +15,14 @@ const Home = ({ isLoggedIn, userInfo }) => {
   const [usersList, setUsersList] = useState([]);
   const [open, setOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState([]);
+  const [currentRender, setCurrentRender] = useState("getUsers");
   const username = userInfo.username;
+
+  const renderChoices = [
+    "getUsers",
+    "getAllRecipes",
+    "displaySubmittedRecipes",
+  ];
 
   const columns = useMemo(
     () => [
@@ -35,7 +44,13 @@ const Home = ({ isLoggedIn, userInfo }) => {
           {
             Header: "Action",
             Cell: ({ row }) => (
-              <button onClick={() => openPortal(row)}> View Recipes</button>
+              <button
+                className="tableActionButton"
+                onClick={() => openPortal(row)}
+              >
+                {" "}
+                View Recipes
+              </button>
             ),
           },
         ],
@@ -72,11 +87,12 @@ const Home = ({ isLoggedIn, userInfo }) => {
     // console.log(row);
   };
 
-  useEffect(async () => {
-    await getAllUsers();
+  useEffect(() => {
+    getAllUsers();
   }, []);
 
   const getAllUsers = async () => {
+    setCurrentRender(renderChoices[0]);
     setIsLoading(true);
     try {
       await Axios.get(
@@ -94,6 +110,7 @@ const Home = ({ isLoggedIn, userInfo }) => {
   };
 
   const getAllRecipes = async () => {
+    setCurrentRender(renderChoices[1]);
     const response = await fetch(
       "https://recipe-mern-app-server.herokuapp.com/recipes",
       {
@@ -176,20 +193,20 @@ const Home = ({ isLoggedIn, userInfo }) => {
 
   const getRecipe = async () => {
     const arr = [];
-    let res;
     try {
       setIsLoading(true);
       setFetchingCompleted(false);
       for (let i = 65; i <= 90; i++) {
-        res = await Axios.get(
+        await Axios.get(
           `https://www.themealdb.com/api/json/v1/1/search.php?f=${String.fromCharCode(
             i
           ).toLowerCase()}`
-        );
-        if (res.data.meals !== null) {
-          console.log(res.data.meals);
-          arr.push(res.data.meals);
-        }
+        ).then((res) => {
+          if (res.data.meals !== null) {
+            console.log(res.data.meals);
+            arr.push(res.data.meals);
+          }
+        });
       }
       console.log(arr);
     } catch (err) {
@@ -254,6 +271,30 @@ const Home = ({ isLoggedIn, userInfo }) => {
     setFetchingCompleted(true);
   };
 
+  const displaySubmittedRecipes = () => {
+    setCurrentRender(renderChoices[2]);
+  };
+
+  let renderResult;
+
+  if (currentRender === renderChoices[0]) {
+    renderResult = usersList.length !== 0 && (
+      <UsersListTable
+        columns={columns}
+        data={usersList}
+        className="usersTable"
+      />
+    );
+  } else if (currentRender === renderChoices[1]) {
+    renderResult = (
+      <div>
+        <h2> Get all recipes component here. </h2>
+      </div>
+    );
+  } else if (currentRender === renderChoices[2]) {
+    renderResult = <SubmittedRecipes />;
+  }
+
   return (
     <>
       <div className="homePage">
@@ -262,11 +303,7 @@ const Home = ({ isLoggedIn, userInfo }) => {
             <h3> Welcome, {username} </h3>
           </>
         ) : (
-          <div className="loadingPage">
-            <h2>
-              This is the home page, please log in to access your collections
-            </h2>
-          </div>
+          <Loading source={"home"} />
         )}
         {/* Authentication access for admin only */}
         {isLoggedIn && username === "admin" ? (
@@ -277,6 +314,10 @@ const Home = ({ isLoggedIn, userInfo }) => {
               <button onClick={getRecipe}>Get recipes</button>
               <button onClick={sendRecipeToBackEnd}>
                 Send recipe to backend
+              </button>
+              <button onClick={displaySubmittedRecipes}>
+                {" "}
+                Display submitted recipes{" "}
               </button>
             </div>
 
@@ -289,16 +330,9 @@ const Home = ({ isLoggedIn, userInfo }) => {
               <div>{successMessage}</div>
               <div>{errorMessage}</div>
             </div>
-            <br />
-            {usersList.length != 0 && (
-              <div className="usersListTableContainer">
-                <UsersListTable
-                  columns={columns}
-                  data={usersList}
-                  className="usersTable"
-                />
-              </div>
-            )}
+
+            {renderResult}
+
             <div className="portalContainer">
               <RecipePortal
                 isOpen={open}

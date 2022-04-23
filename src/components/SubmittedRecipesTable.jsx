@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { useTable, useSortBy, useFilters, usePagination } from "react-table";
 
-export default function UsersListTable({ columns, data, className }) {
+export default function SubmittedRecipesTable({ columns, data, className }) {
   const defaultColumn = useMemo(
     () => ({
       Filter: TextFilter,
@@ -50,7 +50,7 @@ export default function UsersListTable({ columns, data, className }) {
   );
 
   return (
-    <div className="usersListTableContainer">
+    <div className="submittedRecipesTableContainer">
       <table {...getTableProps()} className={className}>
         <thead>
           {headerGroups.map((headerGroup) => (

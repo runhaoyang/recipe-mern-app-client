@@ -49,6 +49,8 @@ const Recipes = ({ userInfo, setUserInfo, isLoggedIn }) => {
     getAllRecipes();
   }, []);
 
+  console.log(displayArray);
+
   // Get current posts
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;

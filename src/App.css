@@ -38,8 +38,6 @@ button {
 
 .navbarContainer {
   display: flex;
-  justify-content: space-between;
-  /* background-color: #333; */
   overflow: hidden;
   background-color: #333;
   position: sticky;
@@ -53,7 +51,7 @@ button {
 }
 
 .navBar1 {
-  width: 40%;
+  width: 50%;
 }
 
 .navBar2 {
@@ -62,7 +60,7 @@ button {
 
 .navBar1 ul li {
   display: inline-block;
-  width: 33%;
+  width: 25%;
 }
 
 .navBar2 ul li {
@@ -198,6 +196,14 @@ button {
   margin-top: 25%;
 }
 
+.recipeForm {
+  /* margin: auto; */
+  background-color: cornflowerblue;
+  text-align: center;
+  margin: 10%;
+  overflow: scroll;
+}
+
 .loadingPage h2 {
   text-align: center;
 }
@@ -314,7 +320,6 @@ button {
 }
 
 .modalButtonContainer {
-  background-color: deeppink;
   display: flex;
   justify-content: space-between;
   background-color: #333;
@@ -349,14 +354,6 @@ button {
   height: 2em;
 }
 
-.usersListContainer {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  column-gap: 1em;
-  row-gap: 1em;
-  text-align: center;
-}
-
 .usersList {
   /* background-color: tomato; */
   -webkit-box-shadow: 0px 0px 3px 0px #000000;
@@ -373,19 +370,28 @@ button {
 
 .portal {
   position: absolute;
-  background-color: rgb(253, 249, 249);
+  background-color: white;
   border: 1px solid #555;
   left: 0;
   right: 0;
   margin: auto;
-  height: 80%;
+  height: 82%;
   top: 12%;
-  width: 45%;
+  width: 50%;
+  text-align: center;
+  overflow: scroll;
 }
 
-.usersListTableContainer {
+.usersListTableContainer,
+.submittedRecipesTableContainer {
   text-align: center;
-  width: 50%;
+  width: 70%;
+  margin: auto;
+  margin-top: 1em;
+}
+
+.submittedRecipesPortalContainer {
+  width: 90%;
   margin: auto;
 }
 
@@ -393,19 +399,29 @@ button {
   text-align: center;
 }
 
-.usersTable {
+.usersTable,
+.submittedRecipesTable {
   border-left: 1px solid black;
   border-top: 1px solid black;
   border-spacing: 0;
+  box-shadow: 0 1px 1px rgb(0 0 0 / 25%), 0 2px 2px rgb(0 0 0 / 20%),
+    0 4px 4px rgb(0 0 0 / 15%), 0 8px 8px rgb(0 0 0 / 10%),
+    0 16px 16px rgb(0 0 0 / 5%);
+  margin-bottom: 1em;
 }
 
 .portalTable {
   border-left: 1px solid black;
   border-top: 1px solid black;
   border-spacing: 0;
-  background-color: powderblue;
+  background-color: white;
   margin: auto;
-  margin-top: 4em;
+  margin-top: 1em;
+  box-shadow: 0 1px 1px rgb(0 0 0 / 25%), 0 2px 2px rgb(0 0 0 / 20%),
+    0 4px 4px rgb(0 0 0 / 15%), 0 8px 8px rgb(0 0 0 / 10%),
+    0 16px 16px rgb(0 0 0 / 5%);
+  margin-bottom: 1em;
+  /* min-height: 25em; */
   /* position: absolute;
   left: 0;
   right: 0;
@@ -419,9 +435,29 @@ th,
 td {
   padding: 0.5rem;
   border-bottom: 1px solid black;
-  border-right: 1px solid black;
+  border-right: 1px solid #000000;
+  height: 2.5em;
+  width: 15em;
+  border-right: 1px solid white;
 }
 
-thead tr:nth-child(even) th div {
+/* thead tr:nth-child(even) th div {
   cursor: pointer;
+
+} */
+
+.tableActionButton {
+  cursor: pointer;
+  -webkit-box-shadow: 0px 0px 3px 0px #000000;
+  box-shadow: 0px 0px 3px -5px #000000;
+  border-radius: 5px;
+  min-height: 3em;
+}
+
+.approve {
+  background-color: lightgreen;
+}
+
+.deny {
+  background-color: salmon;
 }

@@ -7,11 +7,11 @@ const RecipeItem = ({ item, setModalState, setCurrentRecipe }) => {
     setCurrentRecipe(item);
   };
 
-  if (item.hasOwnProperty("userSubmitted")) {
+  if (item.userSubmitted) {
     if (item.strMealThumb === undefined) {
-      image = `http://localhost:5000/uploads/2022-04-23-No-Image-Placeholder.svg.png`;
+      image = `https://recipe-mern-app-server.herokuapp.com/uploads/2022-04-23-No-Image-Placeholder.svg.png`;
     } else {
-      image = `http://localhost:5000/${item.strMealThumb}`;
+      image = `https://recipe-mern-app-server.herokuapp.com/${item.strMealThumb}`;
     }
   } else {
     image = item.strMealThumb;

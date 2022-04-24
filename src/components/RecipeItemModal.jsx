@@ -105,7 +105,7 @@ const RecipeItemModal = ({
     }
     try {
       await Axios.post(
-        "hhttps://recipe-mern-app-server.herokuapp.com/recipes/exists",
+        "https://recipe-mern-app-server.herokuapp.com/recipes/exists",
         {
           username: userInfo.username,
           recipes: currentRecipe,

@@ -105,7 +105,7 @@ const AddRecipe = ({ userInfo, isLoggedIn }) => {
         );
 
         await Axios.post(
-          "https://recipe-mern-app-server.herokuapp.com/submit",
+          "https://recipe-mern-app-server.herokuapp.com/submittedRecipes/submit",
           formData
         ).then((res) => {
           console.log(res);

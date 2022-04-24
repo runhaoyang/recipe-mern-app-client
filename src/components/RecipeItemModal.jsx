@@ -105,12 +105,13 @@ const RecipeItemModal = ({
     }
     try {
       await Axios.post(
-        "https://recipe-mern-app-server.herokuapp.com/recipes/exists",
+        "hhttps://recipe-mern-app-server.herokuapp.com/recipes/exists",
         {
           username: userInfo.username,
           recipes: currentRecipe,
         }
       ).then(async (res) => {
+        console.log(res);
         if (res.data === "doesNotExist") {
           await Axios.post(
             "https://recipe-mern-app-server.herokuapp.com/recipes/save",

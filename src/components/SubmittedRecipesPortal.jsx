@@ -1,21 +1,11 @@
 import ReactDOM from "react-dom";
-import SubmittedRecipesTable from "./SubmittedRecipesTable";
 
-const SubmittedRecipesPortal = ({
-  isOpen,
-  onClose,
-  selectedRow,
-  modalColumns,
-}) => {
-  //@todo 4/16 - Scratch the table idea and instead render full details for each recipe in the submitttedRecipe portal such as ID, name, category, author, date added, all ingredients: amount, instructions into a cleanly formatted grid view? maybe
-
+const SubmittedRecipesPortal = ({ isOpen, onClose, selectedRow }) => {
+  if (!isOpen) return null;
   let renderFullIngredientsList;
   let recipeName;
   let recipeCategory;
   let recipeInstructionsList;
-  let recipeId;
-  let dateAdded;
-  let postedBy;
   let recipeImagePath;
   if (selectedRow.original) {
     if (selectedRow.original.hasOwnProperty("filePath")) {
@@ -25,9 +15,7 @@ const SubmittedRecipesPortal = ({
     }
 
     console.log(selectedRow.original);
-    postedBy = selectedRow.original.postedBy;
-    recipeId = selectedRow.original.idMeal;
-    dateAdded = selectedRow.original.date;
+
     recipeName = selectedRow.original.strMeal;
     recipeCategory = selectedRow.original.strCategory;
     const ingredientsList = selectedRow.original.strIngredients;
@@ -52,7 +40,6 @@ const SubmittedRecipesPortal = ({
     });
   }
 
-  if (!isOpen) return null;
   return ReactDOM.createPortal(
     <div className="portal">
       {console.log(selectedRow.original)}

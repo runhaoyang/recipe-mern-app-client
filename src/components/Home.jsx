@@ -1,9 +1,11 @@
 import { useMemo, useState, useEffect } from "react";
 import Axios from "axios";
-import UsersListTable from "./UsersListTable";
+import Table from "./Table";
 import RecipePortal from "./RecipePortal";
 import Loading from "./Loading";
 import SubmittedRecipes from "./SubmittedRecipes";
+import AllRecipes from "./AllRecipes";
+import Foco from "react-foco";
 
 const Home = ({ isLoggedIn, userInfo }) => {
   // Array used to store all of the recipes that are fetched from an external API to then be used to store into mongoDB
@@ -42,7 +44,7 @@ const Home = ({ isLoggedIn, userInfo }) => {
             accessor: "recipes.length",
           },
           {
-            Header: "Action",
+            Header: "View",
             Cell: ({ row }) => (
               <button
                 className="tableActionButton"
@@ -177,6 +179,11 @@ const Home = ({ isLoggedIn, userInfo }) => {
             strMeasure19: recipe.strMeasure19,
             strMeasure20: recipe.strMeasure20,
             strYoutube: recipe.strYoutube,
+            postedBy: "TheMealDB",
+            date:
+              new Date().toLocaleString([], { hour12: true }) +
+              " " +
+              new Date().toTimeString().slice(9, 17),
           }
         ).then(() => {
           setSuccessMessage("Recipes successfully added to the database.");
@@ -279,18 +286,15 @@ const Home = ({ isLoggedIn, userInfo }) => {
 
   if (currentRender === renderChoices[0]) {
     renderResult = usersList.length !== 0 && (
-      <UsersListTable
+      <Table
         columns={columns}
         data={usersList}
-        className="usersTable"
+        divContainerClassName="tableDivContainer"
+        tableClassName="tableContainer"
       />
     );
   } else if (currentRender === renderChoices[1]) {
-    renderResult = (
-      <div>
-        <h2> Get all recipes component here. </h2>
-      </div>
-    );
+    renderResult = <AllRecipes />;
   } else if (currentRender === renderChoices[2]) {
     renderResult = <SubmittedRecipes />;
   }
@@ -309,20 +313,19 @@ const Home = ({ isLoggedIn, userInfo }) => {
         {isLoggedIn && username === "admin" ? (
           <>
             <div className="adminFunctions">
-              <button onClick={getAllUsers}>Get all users</button>
-              <button onClick={getAllRecipes}>Get all recipes</button>
+              <button onClick={getAllUsers}>Users List</button>
+              <button onClick={getAllRecipes}>Recipes List</button>
+              <button onClick={displaySubmittedRecipes}>
+                Submitted Recipes
+              </button>
               <button onClick={getRecipe}>Get recipes</button>
               <button onClick={sendRecipeToBackEnd}>
                 Send recipe to backend
               </button>
-              <button onClick={displaySubmittedRecipes}>
-                {" "}
-                Display submitted recipes{" "}
-              </button>
             </div>
 
             <div className="loadingMessage">
-              {isLoading ? <div>Fetching in progress... </div> : null}
+              {isLoading ? <div> Fetching in progress ... </div> : null}
               {fetchingCompleted && <div> Fetching recipes completed </div>}
             </div>
 
@@ -332,15 +335,16 @@ const Home = ({ isLoggedIn, userInfo }) => {
             </div>
 
             {renderResult}
-
-            <div className="portalContainer">
-              <RecipePortal
-                isOpen={open}
-                onClose={() => setOpen(false)}
-                selectedRow={selectedRow}
-                modalColumns={modalColumns}
-              />
-            </div>
+            <Foco onClickOutside={() => setOpen(false)}>
+              <div className="portalContainer">
+                <RecipePortal
+                  isOpen={open}
+                  onClose={() => setOpen(false)}
+                  selectedRow={selectedRow}
+                  modalColumns={modalColumns}
+                />
+              </div>
+            </Foco>
           </>
         ) : null}
         <br />

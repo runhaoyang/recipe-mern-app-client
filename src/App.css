@@ -209,9 +209,18 @@ button {
 }
 
 .modalBackground {
-  width: 87%;
+  width: 75%;
   height: 90%;
-  background-color: rgba(200, 200, 200);
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* background-color: rgba(200, 200, 200); */
+}
+
+.allRecipesBackground {
+  width: 70%;
+  height: 85%;
   position: fixed;
   display: flex;
   justify-content: center;
@@ -219,8 +228,20 @@ button {
 }
 
 .modalContainer {
-  width: 85%;
-  height: 85%;
+  width: 100%;
+  height: 93%;
+  border-radius: 12px;
+  background-color: white;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  display: flex;
+  flex-direction: column;
+  padding: 25px;
+  overflow: scroll;
+}
+
+.allRecipesContainer {
+  width: 100%;
+  height: 92%;
   border-radius: 12px;
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
@@ -382,12 +403,27 @@ button {
   overflow: scroll;
 }
 
-.usersListTableContainer,
-.submittedRecipesTableContainer {
-  text-align: center;
-  width: 70%;
+.allRecipesPortal {
+  position: absolute;
+  left: 0;
+  right: 0;
   margin: auto;
-  margin-top: 1em;
+  height: 82%;
+  top: 12%;
+  width: 70%;
+  overflow: scroll;
+}
+
+.recipesPortal {
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: auto;
+  height: 0%;
+  top: 8%;
+  width: 75%;
+  overflow: scroll;
+  /* background-color: crimson; */
 }
 
 .submittedRecipesPortalContainer {
@@ -399,8 +435,14 @@ button {
   text-align: center;
 }
 
-.usersTable,
-.submittedRecipesTable {
+.tableDivContainer {
+  text-align: center;
+  width: 70%;
+  margin: auto;
+  margin-top: 1em;
+}
+
+.tableContainer {
   border-left: 1px solid black;
   border-top: 1px solid black;
   border-spacing: 0;

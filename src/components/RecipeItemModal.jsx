@@ -1,3 +1,4 @@
+import ReactDOM from "react-dom";
 import { useState, useEffect } from "react";
 import Axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
@@ -111,7 +112,6 @@ const RecipeItemModal = ({
           recipes: currentRecipe,
         }
       ).then(async (res) => {
-        console.log(res);
         if (res.data === "doesNotExist") {
           await Axios.post(
             "https://recipe-mern-app-server.herokuapp.com/recipes/save",
@@ -211,6 +211,8 @@ const RecipeItemModal = ({
     }
   }, []);
 
+  console.log(recipeIngredientList);
+
   const successNotification = () => {
     toast.success("Recipe successfully added to my collections.", {
       position: toast.POSITION.TOP_CENTER,
@@ -236,51 +238,54 @@ const RecipeItemModal = ({
     });
   };
 
-  return (
-    <div className="modalBackground">
-      <div className="modalContainer">
-        <div className="modalButtonContainer">
-          <div className="modalCloseButton">
-            <button onClick={() => setModalState(false)}>Close</button>
+  return ReactDOM.createPortal(
+    <div className="recipesPortal">
+      <div className="modalBackground">
+        <div className="modalContainer">
+          <div className="modalButtonContainer">
+            <div className="modalCloseButton">
+              <button onClick={() => setModalState(false)}>Close</button>
+            </div>
+
+            {addOrDeleteButton === "add" ? (
+              <div className="modalCollectionAddButton">
+                <button onClick={addToCollection}>Add to my collections</button>
+              </div>
+            ) : (
+              <div className="modalCollectionDeleteButton">
+                <button onClick={deleteFromCollection}>
+                  Delete from my collections
+                </button>
+              </div>
+            )}
+          </div>
+          <div className="modalHeader">
+            <div className="modalTitle">
+              <div className="modalName">
+                <p>
+                  {name} <span> ({category})</span>
+                </p>
+              </div>
+              <div className="modalPicture">
+                <img src={image} alt="" />
+              </div>
+            </div>
+            <div className="modalIngredients">
+              <div className="modalIngredientsOne">{groups[0]}</div>
+              <div className="modalIngredientsTwo">{groups[1]}</div>
+              <div className="modalIngredientsThree">{groups[2]}</div>
+              <div className="modalIngredientsFour">{groups[3]}</div>
+            </div>
           </div>
 
-          {addOrDeleteButton === "add" ? (
-            <div className="modalCollectionAddButton">
-              <button onClick={addToCollection}>Add to my collections</button>
-            </div>
-          ) : (
-            <div className="modalCollectionDeleteButton">
-              <button onClick={deleteFromCollection}>
-                Delete from my collections
-              </button>
-            </div>
-          )}
-        </div>
-        <div className="modalHeader">
-          <div className="modalTitle">
-            <div className="modalName">
-              <p>
-                {name} <span> ({category})</span>
-              </p>
-            </div>
-            <div className="modalPicture">
-              <img src={image} alt="" />
-            </div>
-          </div>
-          <div className="modalIngredients">
-            <div className="modalIngredientsOne">{groups[0]}</div>
-            <div className="modalIngredientsTwo">{groups[1]}</div>
-            <div className="modalIngredientsThree">{groups[2]}</div>
-            <div className="modalIngredientsFour">{groups[3]}</div>
+          <div className="modalBody">
+            <div className="modalInstructions">{instructionsList}</div>
           </div>
         </div>
-
-        <div className="modalBody">
-          <div className="modalInstructions">{instructionsList}</div>
-        </div>
+        <ToastContainer />
       </div>
-      <ToastContainer />
-    </div>
+    </div>,
+    document.body
   );
 };
 

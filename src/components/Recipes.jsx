@@ -5,8 +5,9 @@ import RecipeItem from "./RecipeItem";
 import Loading from "./Loading";
 import SearchContainer from "./SearchContainer";
 import RecipeItemModal from "./RecipeItemModal";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Foco from "react-foco";
 
 const Recipes = ({ userInfo, setUserInfo, isLoggedIn }) => {
   const [recipeArray, setRecipeArray] = useState([]);
@@ -16,7 +17,6 @@ const Recipes = ({ userInfo, setUserInfo, isLoggedIn }) => {
   const [postsPerPage] = useState(8);
   const [modalState, setModalState] = useState(false);
   const [currentRecipe, setCurrentRecipe] = useState({});
-  const [usersRecipeList, setUsersRecipeList] = useState(recipeArray);
 
   useEffect(() => {
     const getAllRecipes = async () => {
@@ -79,16 +79,18 @@ const Recipes = ({ userInfo, setUserInfo, isLoggedIn }) => {
         <Loading source={"recipes"} />
       ) : (
         <div className="recipesContainer">
-          {modalState && (
-            <RecipeItemModal
-              setModalState={setModalState}
-              currentRecipe={currentRecipe}
-              userInfo={userInfo}
-              setUserInfo={setUserInfo}
-              isLoggedIn={isLoggedIn}
-              // usersRecipeList = {usersRecipeList}
-            />
-          )}
+          <Foco onClickOutside={() => setModalState(false)}>
+            {modalState && (
+              <RecipeItemModal
+                setModalState={setModalState}
+                currentRecipe={currentRecipe}
+                userInfo={userInfo}
+                setUserInfo={setUserInfo}
+                isLoggedIn={isLoggedIn}
+                // usersRecipeList = {usersRecipeList}
+              />
+            )}
+          </Foco>
           <SearchContainer
             recipeArray={recipeArray}
             setDisplayArray={setDisplayArray}

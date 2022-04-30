@@ -35,6 +35,12 @@ const Loading = ({ source }) => {
         </h2>
       </div>
     );
+  } else if (source === "users") {
+    message = (
+      <div className="loadingPage">
+        <h2>Fetching users ... </h2>
+      </div>
+    );
   }
 
   return <div>{message}</div>;

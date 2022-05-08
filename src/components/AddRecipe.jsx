@@ -3,6 +3,8 @@ import Loading from "./Loading";
 import Axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { storage } from "../firebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const AddRecipe = ({ userInfo, isLoggedIn }) => {
   const [recipeName, setRecipeName] = useState("");
@@ -23,7 +25,7 @@ const AddRecipe = ({ userInfo, isLoggedIn }) => {
   // Contains the quantity corresponding to each ingredient name
   const quantityRef = useRef([]);
   const instructionsRef = useRef([]);
-  const inputFileRef = useRef(null);
+  // const inputFileRef = useRef(null);
   const formRef = useRef(null);
 
   const increaseIngredientFields = () => {
@@ -47,7 +49,7 @@ const AddRecipe = ({ userInfo, isLoggedIn }) => {
     instructionsRef.current = [[], [], []];
 
     setInputFile(null);
-    inputFileRef.current.value = "";
+    // inputFileRef.current.value = "";
   };
 
   const errorNotification = () => {
@@ -82,41 +84,97 @@ const AddRecipe = ({ userInfo, isLoggedIn }) => {
         instructionsList.push(instructionsRef.current[i].value);
       }
     }
-
     try {
-      await Axios.get(
-        "https://recipe-mern-app-server.herokuapp.com/submittedRecipes/getLastId"
-      ).then(async (res) => {
-        console.log(inputFile);
-        const formData = new FormData();
-        formData.append("lastId", parseInt(res.data) + 1);
-        formData.append("postedBy", userInfo.username);
-        formData.append("recipeName", nameRef.current.value);
-        formData.append("recipeCategory", categoryRef.current.value);
-        formData.append("file", inputFile);
-        formData.append("ingredientList", JSON.stringify(ingredientList));
-        formData.append("quantityList", JSON.stringify(quantityList));
-        formData.append("instructions", JSON.stringify(instructionsList));
-        formData.append(
-          "date",
-          new Date().toLocaleString([], { hour12: true }) +
+      const sendData = {};
+      if (inputFile === null) {
+        await Axios.get(
+          "https://recipe-mern-app-server.herokuapp.com/submittedRecipes/getLastId"
+        ).then(async (res) => {
+          sendData.lastId = parseInt(res.data) + 1;
+          sendData.postedBy = userInfo.username;
+          sendData.recipeName = nameRef.current.value;
+          sendData.recipeCategory = categoryRef.current.value;
+          sendData.ingredientList = JSON.stringify(ingredientList);
+          sendData.quantityList = JSON.stringify(quantityList);
+          sendData.instructions = JSON.stringify(instructionsList);
+          sendData.date =
+            new Date().toLocaleString([], { hour12: true }) +
             " " +
-            new Date().toTimeString().slice(9, 17)
-        );
+            new Date().toTimeString().slice(9, 17);
+          console.log("sendData: ");
+          console.log(sendData);
 
-        await Axios.post(
-          "https://recipe-mern-app-server.herokuapp.com/submittedRecipes/submit",
-          formData
-        ).then((res) => {
-          console.log(res);
-          // Clear all fields
-          formRef.current.reset();
-          resetInputFields();
-          successNotification();
+          await Axios.post(
+            "https://recipe-mern-app-server.herokuapp.com/submittedRecipes/submit",
+            sendData
+          )
+            .then((res) => {
+              console.log(res);
+              // Clear all fields
+              formRef.current.reset();
+              resetInputFields();
+              successNotification();
+            })
+            .catch((error) => {
+              console.log(error);
+              errorNotification();
+              console.log("line 122");
+            });
         });
-      });
+      } else {
+        const imageRef = ref(storage, inputFile.name);
+        uploadBytes(imageRef, inputFile).then(() => {
+          getDownloadURL(imageRef)
+            .then((url) => {
+              sendData.filePath = url;
+            })
+            .then(async () => {
+              await Axios.get(
+                "https://recipe-mern-app-server.herokuapp.com/submittedRecipes/getLastId"
+              ).then(async (res) => {
+                sendData.lastId = parseInt(res.data) + 1;
+                sendData.postedBy = userInfo.username;
+                sendData.recipeName = nameRef.current.value;
+                sendData.recipeCategory = categoryRef.current.value;
+                sendData.ingredientList = JSON.stringify(ingredientList);
+                sendData.quantityList = JSON.stringify(quantityList);
+                sendData.instructions = JSON.stringify(instructionsList);
+                sendData.date =
+                  new Date().toLocaleString([], { hour12: true }) +
+                  " " +
+                  new Date().toTimeString().slice(9, 17);
+                sendData.fileName = inputFile.name;
+                sendData.fileType = inputFile.type;
+                console.log("sendData: ");
+                console.log(sendData);
+
+                await Axios.post(
+                  "https://recipe-mern-app-server.herokuapp.com/submittedRecipes/submit",
+                  sendData
+                )
+                  .then((res) => {
+                    console.log(res);
+                    // Clear all fields
+                    formRef.current.reset();
+                    resetInputFields();
+                    successNotification();
+                  })
+                  .catch((error) => {
+                    console.log(error);
+                    errorNotification();
+                    console.log("line 166");
+                  });
+              });
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+          // setInputFile(null);
+        });
+      }
     } catch (err) {
       console.error(`The error is ${err}`);
+      console.log("line 176");
       errorNotification();
     }
   };
@@ -212,7 +270,7 @@ const AddRecipe = ({ userInfo, isLoggedIn }) => {
 
           <input
             type="file"
-            ref={inputFileRef}
+            // ref={inputFileRef}
             accept="image/*"
             name="photo"
             onChange={handleInputFile}

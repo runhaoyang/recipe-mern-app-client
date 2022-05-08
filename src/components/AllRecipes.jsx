@@ -4,12 +4,14 @@ import Table from "./Table";
 import Loading from "./Loading";
 import AllRecipesPortal from "./AllRecipesPortal";
 import Foco from "react-foco";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AllRecipes = () => {
   const [recipesList, setRecipesList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [open, setOpen] = useState(false);
-  const [modalState, setModalState] = useState(false);
+  // const [modalState, setModalState] = useState(false);
   const [selectedRow, setSelectedRow] = useState([]);
 
   const columns = useMemo(
@@ -50,15 +52,49 @@ const AllRecipes = () => {
               </button>
             ),
           },
+          {
+            Header: "Delete",
+            Cell: ({ row }) => (
+              <button
+                className="tableActionButton deny"
+                onClick={() => deleteRecipe(row)}
+              >
+                Delete
+              </button>
+            ),
+          },
         ],
       },
     ],
     []
   );
 
+  const deleteRecipe = async (row) => {
+    console.log(row.original);
+    try {
+      await Axios.delete(
+        `http://localhost:5000/recipes/delete/${row.original.idMeal}`
+      ).then(async () => {
+        await Axios.get("http://localhost:5000/recipes").then((res) => {
+          console.log(res.data);
+          setRecipesList(res.data);
+          deleteNotification();
+        });
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const deleteNotification = () => {
+    toast.info("Successfully deleted.", {
+      position: toast.POSITION.TOP_CENTER,
+    });
+  };
+
   const openPortal = (row) => {
     setOpen(true);
-    setModalState(true);
+    // setModalState(true);
     setSelectedRow(row);
   };
 
@@ -100,6 +136,7 @@ const AllRecipes = () => {
           </Foco>
         </>
       )}
+      <ToastContainer />
     </>
   );
 };

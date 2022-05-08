@@ -11,8 +11,10 @@ const SubmittedRecipesPortal = ({ isOpen, onClose, selectedRow }) => {
     if (selectedRow.original.hasOwnProperty("filePath")) {
       recipeImagePath = selectedRow.original.filePath;
     } else {
-      recipeImagePath = `uploads/2022-04-23-No-Image-Placeholder.svg.png`;
+      recipeImagePath = `https://firebasestorage.googleapis.com/v0/b/recipe-mern-app-images.appspot.com/o/No-Image-Placeholder.svg.png?alt=media&token=8e2ad808-28be-415f-9597-bfaba677266e`;
     }
+
+    console.log(selectedRow.original);
 
     console.log(selectedRow.original);
 
@@ -58,7 +60,7 @@ const SubmittedRecipesPortal = ({ isOpen, onClose, selectedRow }) => {
             minWidth: "12em",
             minHeight: "12em",
           }}
-          src={`https://recipe-mern-app-server.herokuapp.com/${recipeImagePath}`}
+          src={recipeImagePath}
           alt=""
         />
         <h3 style={{ textDecoration: "underline" }}> Ingredients </h3>

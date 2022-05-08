@@ -9,9 +9,9 @@ const RecipeItem = ({ item, setModalState, setCurrentRecipe }) => {
 
   if (item.userSubmitted) {
     if (item.strMealThumb === undefined) {
-      image = `https://recipe-mern-app-server.herokuapp.com/uploads/2022-04-23-No-Image-Placeholder.svg.png`;
+      image = `https://firebasestorage.googleapis.com/v0/b/recipe-mern-app-images.appspot.com/o/No-Image-Placeholder.svg.png?alt=media&token=8e2ad808-28be-415f-9597-bfaba677266e`;
     } else {
-      image = `https://recipe-mern-app-server.herokuapp.com/${item.strMealThumb}`;
+      image = item.strMealThumb;
     }
   } else {
     image = item.strMealThumb;

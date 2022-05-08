@@ -43,7 +43,7 @@ const RecipeItemModal = ({
   if (currentRecipe.hasOwnProperty("strMealThumb")) {
     image = currentRecipe.strMealThumb;
   } else {
-    image = `uploads/2022-04-23-No-Image-Placeholder.svg.png`;
+    image = `https://firebasestorage.googleapis.com/v0/b/recipe-mern-app-images.appspot.com/o/No-Image-Placeholder.svg.png?alt=media&token=8e2ad808-28be-415f-9597-bfaba677266e`;
   }
 
   console.log(currentRecipe);
@@ -53,7 +53,6 @@ const RecipeItemModal = ({
 
   // If the current recipe is a user submitted one then, render the instructions list without first parsing it through a function to split the string into sentences.
   if (currentRecipe.userSubmitted) {
-    image = `https://recipe-mern-app-server.herokuapp.com/${image}`;
     instructions = JSON.parse(instructions);
     instructionsList = instructions.map((list, index) => {
       return (
@@ -210,8 +209,6 @@ const RecipeItemModal = ({
       }
     }
   }, []);
-
-  console.log(recipeIngredientList);
 
   const successNotification = () => {
     toast.success("Recipe successfully added to my collections.", {

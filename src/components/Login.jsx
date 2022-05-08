@@ -70,23 +70,27 @@ const Login = ({ setUserInfo, setUserToken, setIsLoggedIn, isLoggedIn }) => {
         <div className="loginContent">
           <form action="#" onSubmit={handleOnSubmitLogin}>
             <div className="usernameField">
-              Username:{" "}
-              <input
-                className="textInput"
-                type="text"
-                placeholder=""
-                value={username}
-                onChange={handleOnChangeUsername}
-              />
+              <label>
+                Username:{" "}
+                <input
+                  className="textInput"
+                  type="text"
+                  placeholder=""
+                  value={username}
+                  onChange={handleOnChangeUsername}
+                />
+              </label>
             </div>
             <div className="passwordField">
-              Password:{" "}
-              <input
-                className="textInput"
-                type="text"
-                value={password}
-                onChange={handleOnChangePassword}
-              />
+              <label>
+                Password:{" "}
+                <input
+                  className="textInput"
+                  type="text"
+                  value={password}
+                  onChange={handleOnChangePassword}
+                />
+              </label>
             </div>
             <div className="submitField">
               <button>Log in </button>

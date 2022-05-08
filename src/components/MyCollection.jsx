@@ -7,6 +7,7 @@ import SearchContainer from "./SearchContainer";
 import RecipeItemModal from "./RecipeItemModal";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Foco from "react-foco";
 
 const MyCollection = ({ setUserInfo, userInfo, userToken, isLoggedIn }) => {
   const [recipeArray, setRecipeArray] = useState([]);
@@ -45,16 +46,13 @@ const MyCollection = ({ setUserInfo, userInfo, userToken, isLoggedIn }) => {
     getUsersRecipes();
   }, [userInfo]);
 
-  // Loading message for either requiring login or empty array to access my collections
+  // Loading message for requiring login or currently fetching recipes
   let loadingMessage = "";
   if (!isLoggedIn) {
     loadingMessage = "collections";
   } else if (isLoading) {
     loadingMessage = "recipes";
   }
-  // else if (displayArray.length === 0) {
-  //   loadingMessage = "collectionsEmptyArray";
-  // }
 
   // Get current posts
   const indexOfLastPost = currentPage * postsPerPage;
@@ -84,20 +82,22 @@ const MyCollection = ({ setUserInfo, userInfo, userToken, isLoggedIn }) => {
         <Loading source={loadingMessage} />
       ) : (
         <div className="recipesContainer">
-          {modalState && (
-            <RecipeItemModal
-              setModalState={setModalState}
-              currentRecipe={currentRecipe}
-              userInfo={usersCollection}
-              setUserInfo={setUserInfo}
-              isLoggedIn={isLoggedIn}
-              displayArray={displayArray}
-              postsPerPage={postsPerPage}
-              currentPage={currentPage}
-              setCurrentPage={setCurrentPage}
-              currentComponent={currentComponent}
-            />
-          )}
+          <Foco onClickOutside={() => setModalState(false)}>
+            {modalState && (
+              <RecipeItemModal
+                setModalState={setModalState}
+                currentRecipe={currentRecipe}
+                userInfo={usersCollection}
+                setUserInfo={setUserInfo}
+                isLoggedIn={isLoggedIn}
+                displayArray={displayArray}
+                postsPerPage={postsPerPage}
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+                currentComponent={currentComponent}
+              />
+            )}
+          </Foco>
           <SearchContainer
             recipeArray={recipeArray}
             setDisplayArray={setDisplayArray}

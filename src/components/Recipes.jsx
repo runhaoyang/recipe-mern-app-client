@@ -87,7 +87,6 @@ const Recipes = ({ userInfo, setUserInfo, isLoggedIn }) => {
                 userInfo={userInfo}
                 setUserInfo={setUserInfo}
                 isLoggedIn={isLoggedIn}
-                // usersRecipeList = {usersRecipeList}
               />
             )}
           </Foco>

@@ -49,24 +49,28 @@ const Register = () => {
     <div className="registerContent">
       <form action="#" onSubmit={handleOnSubmitRegister}>
         <div className="usernameField">
-          Username:{" "}
-          <input
-            className="textInput"
-            type="text"
-            placeholder=""
-            value={username}
-            onChange={handleOnChangeUsername}
-          />
+          <label>
+            Username:{" "}
+            <input
+              className="textInput"
+              type="text"
+              placeholder=""
+              value={username}
+              onChange={handleOnChangeUsername}
+            />
+          </label>
         </div>
         <div className="passwordField">
-          Password:{" "}
-          <input
-            className="textInput"
-            type="text"
-            placeholder=""
-            value={password}
-            onChange={handleOnChangePassword}
-          />
+          <label>
+            Password:{" "}
+            <input
+              className="textInput"
+              type="text"
+              placeholder=""
+              value={password}
+              onChange={handleOnChangePassword}
+            />
+          </label>
         </div>
         <div className="submitField">
           <button>Register</button>

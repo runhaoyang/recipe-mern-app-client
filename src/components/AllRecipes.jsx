@@ -73,9 +73,11 @@ const AllRecipes = () => {
     console.log(row.original);
     try {
       await Axios.delete(
-        `http://localhost:5000/recipes/delete/${row.original.idMeal}`
+        `https://recipe-mern-app-server.herokuapp.com/recipes/delete/${row.original.idMeal}`
       ).then(async () => {
-        await Axios.get("http://localhost:5000/recipes").then((res) => {
+        await Axios.get(
+          "https://recipe-mern-app-server.herokuapp.com/recipes"
+        ).then((res) => {
           console.log(res.data);
           setRecipesList(res.data);
           deleteNotification();
@@ -102,7 +104,9 @@ const AllRecipes = () => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        await Axios.get("http://localhost:5000/recipes").then((res) => {
+        await Axios.get(
+          "https://recipe-mern-app-server.herokuapp.com/recipes"
+        ).then((res) => {
           console.log(res.data);
           setRecipesList(res.data);
           setIsLoading(false);

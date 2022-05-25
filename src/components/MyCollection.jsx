@@ -32,6 +32,7 @@ const StyledRecipeItems = styled.div`
 
   & div {
     text-align: center;
+    height: 220px;
   }
 `;
 

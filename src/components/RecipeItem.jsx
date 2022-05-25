@@ -31,12 +31,12 @@ const StyledLearnMoreButton = styled.div`
   & a {
     display: inline-block;
     text-decoration: none;
-    line-height: 45px;
+    line-height: 40px;
     color: white;
     background-color: #264653;
     font-weight: bold;
     width: 100%;
-    height: 130%;
+    height: 100%;
     box-sizing: border-box;
   }
 `;

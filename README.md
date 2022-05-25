@@ -3,6 +3,8 @@
 The frontend is hosted on netlify [Live Website](https://recipe-mern-app.netlify.app).  
 https://recipe-mern-app.netlify.app
 
+This recipe management web application is built with the MERN stack.
+
 ## Administrator authorizations
 
 An administrator is able to access any content that a user is able to, along with administrator only functions.       

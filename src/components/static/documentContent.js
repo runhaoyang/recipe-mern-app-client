@@ -7,22 +7,22 @@ export const documentContent = [
   {
     title: "Users List",
     content:
-      " Users List - Table displaying all of the users that are currently registered, each row displays an individual user's username, their ID, the number of recipes in their collections, as well as a button which upon a click will show a pop up modal displaying a table listing all of the recipes in the user's collections.",
+      "Table displaying all of the users that are currently registered, each row displays an individual user's username, their ID, the number of recipes in their collections, as well as a button which upon a click will show a pop up modal displaying a table listing all of the recipes in the user's collections.",
   },
   {
     title: "Recipes List",
     content:
-      "Recipes List - Table displaying all of the recipes that are currently in the database, the headers consists of the recipe's ID, name, category, author of the recipe, the date and time in which it was added to the database, a button to view more information regarding the recipe, and a button to delete the recipe from the database.",
+      "Table displaying all of the recipes that are currently in the database, the headers consists of the recipe's ID, name, category, author of the recipe, the date and time in which it was added to the database, a button to view more information regarding the recipe, and a button to delete the recipe from the database.",
   },
   {
     title: "Submitted Recipes",
     content:
-      "Submitted Recipes - A table displaying all of the submitted recipes that a user has submitted through the /addrecipe directory, the headers in this table are similar to the headers in the Recipes List table, with additional deny and approve buttons to either discard the submitted recipe or to approve the recipe and add it to the recipes database.",
+      "Table displaying all of the submitted recipes that a user has submitted through the /addrecipe directory, the headers in this table are similar to the headers in the Recipes List table, with additional deny and approve buttons to either discard the submitted recipe or to approve the recipe and add it to the recipes database.",
   },
   {
     title: "Fetch Recipes",
     content:
-      "Fetch Recipes - Unlike the previous three buttons used to render a different table on the page, this buttons acts as an action button. Upon click, this button will attempt to fetch recipes from an external API and then upon succession, will attempt to send the fetched recipes into the backend database. Loading toast notifications will appear as a visual aid to measure the pending and completion state of the operations.",
+      "Unlike the previous three buttons used to render a different table on the page, this buttons acts as an action button. Upon click, this button will attempt to fetch recipes from an external API and then upon succession, will attempt to send the fetched recipes into the backend database. Loading toast notifications will appear as a visual aid to measure the pending and completion state of the operations.",
   },
   {
     title: "User authorizations",

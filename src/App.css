@@ -1,14 +1,18 @@
-body {
+/* html {
+  height: 100%;
+} */
+
+/* body {
   margin: 0px 100px;
   margin-bottom: 50px;
   padding: 0px;
   font-family: "Nunito", sans-serif;
-}
+} */
 
-button {
+/* button {
   font-family: inherit;
   font-size: 1em;
-}
+} */
 
 .registerContent,
 .loginContent {
@@ -39,22 +43,18 @@ button {
 .navbarContainer {
   display: flex;
   overflow: hidden;
-  background-color: #333;
+  background-color: #264653;
   position: sticky;
   top: 0;
   width: 100%;
 }
-
+/* 
 .navLinks {
   color: #f2f2f2;
   text-decoration: none;
-}
-
+} */
+/* 
 .navBar1 {
-  width: 50%;
-}
-
-.navBar2 {
   width: 50%;
 }
 
@@ -63,40 +63,42 @@ button {
   width: 25%;
 }
 
+.navBar2 {
+  width: 50%;
+}
+
 .navBar2 ul li {
   float: right;
   list-style: none;
   width: 25%;
-}
-.recipeItem {
-  /* border: 1px solid;
-  border-radius: 15px; */
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25), 0 2px 2px rgba(0, 0, 0, 0.2),
-    0 4px 4px rgba(0, 0, 0, 0.15), 0 8px 8px rgba(0, 0, 0, 0.1),
-    0 16px 16px rgba(0, 0, 0, 0.05);
+} */
+/* .recipeItem {
+  box-shadow: rgb(0 0 0 / 40%) 0px 2px 4px, rgb(0 0 0 / 30%) 0px 7px 13px -3px,
+    rgb(0 0 0 / 20%) 0px -3px 0px inset;
   border-radius: 10px;
   max-width: 100%;
   max-height: 300px;
   margin-bottom: 0px;
   margin-top: 10px;
-}
+  overflow: hidden;
+} */
 
-.recipeItems img {
+/* .recipeItems img {
   max-width: 100%;
   max-height: 200px;
   flex-shrink: 0;
   min-width: 100%;
   min-height: 100%;
-}
+} */
 
-.recipeItems-image-container {
+/* .recipeItems-image-container {
   display: flex;
   justify-content: center;
   align-items: center;
   overflow: hidden;
-}
+} */
 
-.recipeItems {
+/* .recipeItems {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   column-gap: 3em;
@@ -106,29 +108,30 @@ button {
 
 .recipeItems div {
   text-align: center;
-  /* background-color: powderblue; */
-}
+  background-color: powderblue;
+} */
 
-.learnMore {
-  margin-top: 7px;
-  margin-bottom: 7px;
+/* .learnMore {
+  height: 100%;
 }
 
 .learnMore a {
   display: inline-block;
   text-decoration: none;
-  border: 1px solid;
-  line-height: 27px;
-  padding-left: 15px;
-  padding-right: 15px;
-  color: black;
-}
+  line-height: 40px;
+  color: white;
+  background-color: #264653;
+  font-weight: bold;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+} */
 
-.recipeItems-name {
+/* .recipeItems-name {
   margin-bottom: 5px;
   margin-top: 5px;
   min-height: 2.2em;
-}
+} */
 
 .navBar-ul-2 > li {
   float: right;
@@ -153,34 +156,32 @@ button {
   margin: 0px;
 }
 
-.pagination {
+/* .pagination {
   display: flex;
   padding-left: 0;
   list-style: none;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25), 0 2px 2px rgba(0, 0, 0, 0.2),
-    0 4px 4px rgba(0, 0, 0, 0.15), 0 8px 8px rgba(0, 0, 0, 0.1),
-    0 16px 16px rgba(0, 0, 0, 0.05);
-}
+  box-shadow: rgb(0 0 0 / 40%) 0px 2px 4px, rgb(0 0 0 / 30%) 0px 7px 13px -3px,
+    rgb(0 0 0 / 20%) 0px -3px 0px inset;
+  background-color: #264653;
+  color: white;
+} */
 
-.page-link {
+/* .page-link {
   padding: 0.5rem 1rem;
   position: relative;
   display: block;
-  /* color: #0d6efd; */
   text-decoration: none;
-}
-
-.page-item {
   cursor: pointer;
-}
+} */
 
 .selected {
-  background-color: #0d6efd;
+  background-color: #2a9d8f;
   color: white;
 }
 
 .disabled {
-  color: grey;
+  color: #264653;
+  background-color: #264653;
   pointer-events: none;
   cursor: default;
 }
@@ -196,16 +197,16 @@ button {
   margin-top: 25%;
 }
 
+.loadingPage h2 {
+  text-align: center;
+}
+
 .recipeForm {
   /* margin: auto; */
   background-color: cornflowerblue;
   text-align: center;
   margin: 10%;
   overflow: scroll;
-}
-
-.loadingPage h2 {
-  text-align: center;
 }
 
 .modalBackground {
@@ -215,7 +216,6 @@ button {
   display: flex;
   justify-content: center;
   align-items: center;
-  /* background-color: rgba(200, 200, 200); */
 }
 
 .allRecipesBackground {
@@ -225,6 +225,10 @@ button {
   display: flex;
   justify-content: center;
   align-items: center;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
+    rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+  border-radius: 12px;
+  border: 1px solid #555;
 }
 
 .modalContainer {
@@ -232,7 +236,8 @@ button {
   height: 93%;
   border-radius: 12px;
   background-color: white;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
+    rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
   display: flex;
   flex-direction: column;
   padding: 25px;
@@ -251,14 +256,18 @@ button {
   overflow: scroll;
 }
 
-.modalPicture img {
+/* .modalPicture {
+  height: 100%;
+} */
+
+/* .modalPicture img {
   max-height: 150px;
   max-width: 150px;
   min-width: 100%;
   min-height: 100%;
-}
+} */
 
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
   -webkit-appearance: none;
   width: 10px;
 }
@@ -266,7 +275,7 @@ button {
 ::-webkit-scrollbar-thumb {
   border-radius: 5px;
   background-color: rgba(0, 0, 0, 0.5);
-}
+} */
 
 .modalHeader {
   display: grid;
@@ -276,29 +285,29 @@ button {
 
 .modalTitle {
   text-align: center;
-  -webkit-box-shadow: 0px 0px 8px 0px #000000;
-  box-shadow: 0px 0px 8px 0px #000000;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
+    rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
   margin-top: 1em;
   margin-bottom: 1em;
   border-radius: 0.25em;
+  overflow: hidden;
 }
 
-.modalIngredients {
+.modalIngredientsContainer {
   padding-top: 1em;
-  -webkit-box-shadow: 0px 0px 8px 0px #000000;
-  box-shadow: 0px 0px 8px 0px #000000;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
+    rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
   margin-top: 1em;
   margin-bottom: 1em;
   border-radius: 0.25em;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   list-style-type: none;
-  /* text-align: center; */
 }
 
 .modalInstructions {
-  -webkit-box-shadow: 0px 0px 8px 0px #000000;
-  box-shadow: 0px 0px 8px 0px #000000;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
+    rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
   padding: 1em;
   border-radius: 0.25em;
 }
@@ -317,18 +326,24 @@ button {
 .modalCloseButton button {
   padding: 0.5em;
   cursor: pointer;
+  color: white;
+  background-color: #264653;
+  font-weight: bold;
 }
 
 .modalCollectionAddButton button {
   padding: 0.5em;
   cursor: pointer;
-  background-color: lightgreen;
+  background-color: #2a9d8f;
+  color: white;
 }
 
 .modalCollectionDeleteButton button {
   padding: 0.5em;
   cursor: pointer;
-  background-color: tomato;
+  background-color: #e76f51;
+  color: white;
+  font-weight: bold;
 }
 .modalInstructionList {
   line-height: 2em;
@@ -346,9 +361,9 @@ button {
   background-color: #333;
 }
 
-.active {
-  background-color: steelblue;
-}
+/* .active {
+  background-color: #2a9d8f;
+} */
 
 .usernameField {
   /* background-color: teal; */
@@ -396,11 +411,14 @@ button {
   left: 0;
   right: 0;
   margin: auto;
-  height: 82%;
+  height: 85%;
   top: 12%;
   width: 50%;
   text-align: center;
   overflow: scroll;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
+    rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+  border-radius: 12px;
 }
 
 .allRecipesPortal {
@@ -437,7 +455,7 @@ button {
 
 .tableDivContainer {
   text-align: center;
-  width: 70%;
+  width: 90%;
   margin: auto;
   margin-top: 1em;
 }
@@ -450,6 +468,7 @@ button {
     0 4px 4px rgb(0 0 0 / 15%), 0 8px 8px rgb(0 0 0 / 10%),
     0 16px 16px rgb(0 0 0 / 5%);
   margin-bottom: 1em;
+  width: 100%;
 }
 
 .portalTable {
@@ -473,7 +492,7 @@ button {
   width: 45%; */
 }
 
-th,
+/* th,
 td {
   padding: 0.5rem;
   border-bottom: 1px solid black;
@@ -481,7 +500,7 @@ td {
   height: 2.5em;
   width: 15em;
   border-right: 1px solid white;
-}
+} */
 
 /* thead tr:nth-child(even) th div {
   cursor: pointer;
@@ -497,9 +516,42 @@ td {
 }
 
 .approve {
-  background-color: lightgreen;
+  background-color: #2a9d8f;
+  color: white;
+  font-weight: bold;
 }
 
 .deny {
-  background-color: salmon;
+  background-color: #e76f51;
+  color: white;
+  font-weight: bold;
 }
+
+.view {
+  background-color: #264653;
+  color: white;
+  font-weight: bold;
+}
+
+.portalCloseButton {
+  margin-top: 1em;
+  background-color: #264653;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0.5em;
+}
+
+/* .tableButtons button {
+  color: white;
+  background-color: #264653;
+  padding: 0.2em;
+  cursor: pointer;
+  font-weight: bold;
+} */
+
+/* .tableButtons button:disabled {
+  color: #264653;
+  background-color: #264653;
+  cursor: default;
+} */

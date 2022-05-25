@@ -1,12 +1,52 @@
 import { useMemo } from "react";
 import { useTable, useSortBy, useFilters, usePagination } from "react-table";
+import styled from "styled-components";
 
-export default function Table({
-  columns,
-  data,
-  divContainerClassName,
-  tableClassName,
-}) {
+const StyledTableDivContainer = styled.div`
+  text-align: center;
+  width: 90%;
+  margin: auto;
+  margin-top: 1em;
+`;
+
+const StyledTableContainer = styled.table`
+  border-left: 1px solid black;
+  border-top: 1px solid black;
+  border-spacing: 0;
+  box-shadow: 0 1px 1px rgb(0 0 0 / 25%), 0 2px 2px rgb(0 0 0 / 20%),
+    0 4px 4px rgb(0 0 0 / 15%), 0 8px 8px rgb(0 0 0 / 10%),
+    0 16px 16px rgb(0 0 0 / 5%);
+  margin-bottom: 1em;
+  width: 100%;
+
+  th,
+  td {
+    padding: 0.5rem;
+    border-bottom: 1px solid black;
+    border-right: 1px solid #000000;
+    height: 2.5em;
+    width: 15em;
+    border-right: 1px solid white;
+  }
+`;
+
+const TableButtonsContainer = styled.div`
+  & button {
+    color: white;
+    background-color: #264653;
+    padding: 0.2em;
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+  & button:disabled {
+    color: #264653;
+    background-color: #264653;
+    cursor: default;
+  }
+`;
+
+export default function Table({ columns, data }) {
   const defaultColumn = useMemo(
     () => ({
       Filter: TextFilter,
@@ -55,8 +95,8 @@ export default function Table({
   );
 
   return (
-    <div className={divContainerClassName}>
-      <table {...getTableProps()} className={tableClassName}>
+    <StyledTableDivContainer>
+      <StyledTableContainer {...getTableProps()}>
         <thead>
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
@@ -96,8 +136,8 @@ export default function Table({
             );
           })}
         </tbody>
-      </table>
-      <div>
+      </StyledTableContainer>
+      <TableButtonsContainer>
         <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
           {"First"}
         </button>
@@ -119,7 +159,7 @@ export default function Table({
             {pageIndex + 1} of {pageOptions.length}
           </em>
         </div>
-      </div>
-    </div>
+      </TableButtonsContainer>
+    </StyledTableDivContainer>
   );
 }

@@ -1,4 +1,36 @@
 import ReactDOM from "react-dom";
+import styled from "styled-components";
+
+const StyledPortal = styled.div`
+  position: absolute;
+  background-color: white;
+  border: 1px solid #555;
+  left: 0;
+  right: 0;
+  margin: auto;
+  height: 85%;
+  top: 12%;
+  width: 50%;
+  text-align: center;
+  overflow: scroll;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
+    rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+  border-radius: 12px;
+`;
+
+const StyledCloseButton = styled.button`
+  margin-top: 1em;
+  background-color: #264653;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0.5em;
+`;
+
+const StyledPortalContainer = styled.div`
+  width: 90%;
+  margin: auto;
+`;
 
 const SubmittedRecipesPortal = ({ isOpen, onClose, selectedRow }) => {
   if (!isOpen) return null;
@@ -13,10 +45,6 @@ const SubmittedRecipesPortal = ({ isOpen, onClose, selectedRow }) => {
     } else {
       recipeImagePath = `https://firebasestorage.googleapis.com/v0/b/recipe-mern-app-images.appspot.com/o/No-Image-Placeholder.svg.png?alt=media&token=8e2ad808-28be-415f-9597-bfaba677266e`;
     }
-
-    console.log(selectedRow.original);
-
-    console.log(selectedRow.original);
 
     recipeName = selectedRow.original.strMeal;
     recipeCategory = selectedRow.original.strCategory;
@@ -43,13 +71,11 @@ const SubmittedRecipesPortal = ({ isOpen, onClose, selectedRow }) => {
   }
 
   return ReactDOM.createPortal(
-    <div className="portal">
+    <StyledPortal>
       {console.log(selectedRow.original)}
 
-      <button style={{ marginTop: "1em" }} onClick={onClose}>
-        Close
-      </button>
-      <div className="submittedRecipesPortalContainer">
+      <StyledCloseButton onClick={onClose}>Close</StyledCloseButton>
+      <StyledPortalContainer>
         <h3>
           {recipeName} <span> ({recipeCategory})</span>
         </h3>
@@ -74,8 +100,8 @@ const SubmittedRecipesPortal = ({ isOpen, onClose, selectedRow }) => {
             </li>
           );
         })}
-      </div>
-    </div>,
+      </StyledPortalContainer>
+    </StyledPortal>,
     document.body
   );
 };

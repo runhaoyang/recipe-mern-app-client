@@ -1,5 +1,120 @@
 import ReactDOM from "react-dom";
 import { useState, useEffect } from "react";
+import styled from "styled-components";
+
+const StyledPortal = styled.div`
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: auto;
+  height: 82%;
+  top: 12%;
+  width: 70%;
+  overflow: scroll;
+`;
+
+const StyledBackground = styled.div`
+  width: 70%;
+  height: 85%;
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
+    rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+  border-radius: 12px;
+  border: 1px solid #555;
+`;
+
+const StyledContainer = styled.div`
+  width: 100%;
+  height: 92%;
+  border-radius: 12px;
+  background-color: white;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  display: flex;
+  flex-direction: column;
+  padding: 25px;
+  overflow: scroll;
+`;
+
+const StyledButtonContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  background-color: #333;
+`;
+
+const StyledCloseButton = styled.button`
+  padding: 0.5em;
+  cursor: pointer;
+  color: white;
+  background-color: #264653;
+  font-weight: bold;
+`;
+
+const StyledModalHeader = styled.div`
+  display: grid;
+  grid-template-columns: 2fr 8fr;
+  column-gap: 1em;
+`;
+
+const StyledModalTitle = styled.div`
+  text-align: center;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
+    rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  border-radius: 0.25em;
+  overflow: hidden;
+`;
+
+const StyledModalName = styled.div`
+  margin: 0.2em;
+`;
+
+const StyledModalPicture = styled.div`
+  height: 100%;
+
+  & img {
+    max-height: 150px;
+    max-width: 150px;
+    min-width: 100%;
+    min-height: 100%;
+  }
+`;
+
+const StyledModalIngredientsContainer = styled.div`
+  padding-top: 1em;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
+    rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  border-radius: 0.25em;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  list-style-type: none;
+
+  & div {
+    padding-left: 1em;
+  }
+`;
+
+const StyledModalRecipeList = styled.li`
+  margin-bottom: 10px;
+`;
+
+const StyledModalInstructions = styled.div`
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
+    rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+  padding: 1em;
+  border-radius: 0.25em;
+`;
+
+const StyledModalInstructionList = styled.li`
+  line-height: 2em;
+  list-style: none;
+  display: inline;
+`;
 
 const AllRecipesPortal = ({ isOpen, onClose, selectedRow }) => {
   const [recipeIngredientList, setRecipeIngredientList] = useState([]);
@@ -46,11 +161,7 @@ const AllRecipesPortal = ({ isOpen, onClose, selectedRow }) => {
   };
 
   const ingredientList = recipeIngredientList.map((list, index) => {
-    return (
-      <li className="modalRecipeList" key={index}>
-        {list}
-      </li>
-    );
+    return <StyledModalRecipeList key={index}>{list}</StyledModalRecipeList>;
   });
 
   let image;
@@ -70,11 +181,11 @@ const AllRecipesPortal = ({ isOpen, onClose, selectedRow }) => {
     instructionsList = instructions.map((list, index) => {
       return (
         <div key={index}>
-          <label className="modalLabel">
+          <label>
             <input type="checkBox" />
-            <li className="modalInstructionList" key={index}>
+            <StyledModalInstructionList key={index}>
               {list}
-            </li>
+            </StyledModalInstructionList>
           </label>
         </div>
       );
@@ -87,11 +198,11 @@ const AllRecipesPortal = ({ isOpen, onClose, selectedRow }) => {
         }
         return (
           <div key={index}>
-            <label className="modalLabel">
+            <label>
               <input type="checkBox" />
-              <li className="modalInstructionList" key={index}>
+              <StyledModalInstructionList key={index}>
                 {list}
-              </li>
+              </StyledModalInstructionList>
             </label>
           </div>
         );
@@ -112,39 +223,34 @@ const AllRecipesPortal = ({ isOpen, onClose, selectedRow }) => {
     });
 
   return ReactDOM.createPortal(
-    <div className="allRecipesPortal">
-      <div className="allRecipesBackground">
-        <div className="allRecipesContainer">
-          <div className="modalButtonContainer">
-            <div className="modalCloseButton">
-              <button onClick={onClose}>Close</button>
-            </div>
-          </div>
-          <div className="modalHeader">
-            <div className="modalTitle">
-              <div className="modalName">
-                <p>
-                  {name} <span> ({category})</span>
-                </p>
-              </div>
-              <div className="modalPicture">
-                <img src={image} alt="" />
-              </div>
-            </div>
-            <div className="modalIngredients">
-              <div className="modalIngredientsOne">{groups[0]}</div>
-              <div className="modalIngredientsTwo">{groups[1]}</div>
-              <div className="modalIngredientsThree">{groups[2]}</div>
-              <div className="modalIngredientsFour">{groups[3]}</div>
-            </div>
-          </div>
+    <StyledPortal>
+      <StyledBackground>
+        <StyledContainer>
+          <StyledButtonContainer>
+            <StyledCloseButton onClick={onClose}>Close</StyledCloseButton>
+          </StyledButtonContainer>
+          <StyledModalHeader>
+            <StyledModalTitle>
+              <StyledModalName>
+                {name} <span> ({category})</span>
+              </StyledModalName>
 
-          <div className="modalBody">
-            <div className="modalInstructions">{instructionsList}</div>
-          </div>
-        </div>
-      </div>
-    </div>,
+              <StyledModalPicture>
+                <img src={image} alt="" />
+              </StyledModalPicture>
+            </StyledModalTitle>
+            <StyledModalIngredientsContainer>
+              <div>{groups[0]}</div>
+              <div>{groups[1]}</div>
+              <div>{groups[2]}</div>
+              <div>{groups[3]}</div>
+            </StyledModalIngredientsContainer>
+          </StyledModalHeader>
+
+          <StyledModalInstructions>{instructionsList}</StyledModalInstructions>
+        </StyledContainer>
+      </StyledBackground>
+    </StyledPortal>,
     document.body
   );
 };

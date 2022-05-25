@@ -1,24 +1,64 @@
-import { useMemo, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Axios from "axios";
-import Table from "./Table";
-import RecipePortal from "./RecipePortal";
-import Loading from "./Loading";
 import SubmittedRecipes from "./SubmittedRecipes";
 import AllRecipes from "./AllRecipes";
-import Foco from "react-foco";
+import UsersList from "./UsersList";
+import UserHomePage from "./UserHomePage";
+import styled from "styled-components";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+const StyledHomePage = styled.div`
+  & h3 {
+    margin: 0px;
+  }
+
+  & .Toastify__toast-body {
+    white-space: pre-line;
+  }
+`;
+
+const StyledAdminFunctions = styled.div`
+  margin-top: 0.5em;
+
+  & button {
+    margin-right: 0.5em;
+    cursor: pointer;
+    background-color: #264653;
+    color: white;
+    font-weight: bold;
+    padding: 0.3em;
+    -webkit-box-shadow: 0px 0px 3px 0px #000000;
+    box-shadow: 0px 0px 3px -5px #000000;
+    border-radius: 5px;
+    min-height: 3em;
+  }
+
+  .active {
+    background-color: #2a9d8f;
+  }
+
+  .fetchButton {
+    background-color: #e76f51;
+  }
+`;
 
 const Home = ({ isLoggedIn, userInfo }) => {
-  // Array used to store all of the recipes that are fetched from an external API to then be used to store into mongoDB
-  const [recipeArray, setRecipeArray] = useState([]);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
+  const [renderOptions, setRenderOptions] = useState({
+    activeButton: null,
+    choices: [
+      { id: 1, name: "Users List" },
+      { id: 2, name: "Recipes List" },
+      { id: 3, name: "Submitted Recipes" },
+    ],
+  });
   const [isLoading, setIsLoading] = useState(false);
   const [fetchingCompleted, setFetchingCompleted] = useState(false);
-  const [usersList, setUsersList] = useState([]);
-  const [open, setOpen] = useState(false);
-  const [selectedRow, setSelectedRow] = useState([]);
   const [currentRender, setCurrentRender] = useState("getUsers");
   const username = userInfo.username;
+
+  // Array used to store all of the recipes that are fetched from an external API to then be used to store into mongoDB
+  let recipesToBeSent = [];
 
   const renderChoices = [
     "getUsers",
@@ -26,108 +66,47 @@ const Home = ({ isLoggedIn, userInfo }) => {
     "displaySubmittedRecipes",
   ];
 
-  const columns = useMemo(
-    () => [
-      {
-        Header: "Users List",
-        columns: [
-          {
-            Header: "Username",
-            accessor: "username",
-          },
-          {
-            Header: "ID",
-            accessor: "_id",
-          },
-          {
-            Header: "Recipes",
-            accessor: "recipes.length",
-          },
-          {
-            Header: "View",
-            Cell: ({ row }) => (
-              <button
-                className="tableActionButton"
-                onClick={() => openPortal(row)}
-              >
-                {" "}
-                View Recipes
-              </button>
-            ),
-          },
-        ],
-      },
-    ],
-    []
-  );
-
-  const modalColumns = useMemo(
-    () => [
-      {
-        Header: "Recipes List",
-        columns: [
-          {
-            Header: "ID",
-            accessor: "idMeal",
-          },
-          {
-            Header: "Recipe",
-            accessor: "strMeal",
-            maxWidth: 250,
-            minWidth: 250,
-            width: 100,
-          },
-        ],
-      },
-    ],
-    []
-  );
-
-  const openPortal = (row) => {
-    setOpen(true);
-    setSelectedRow(row);
-    // console.log(row);
-  };
-
   useEffect(() => {
-    getAllUsers();
+    toggleActiveButton(0);
+    adminInfoNotification();
   }, []);
 
-  const getAllUsers = async () => {
-    setCurrentRender(renderChoices[0]);
-    setIsLoading(true);
-    try {
-      await Axios.get(
-        "https://recipe-mern-app-server.herokuapp.com/users"
-      ).then((res) => {
-        setUsersList(res.data);
-        setIsLoading(false);
-      });
-    } catch (err) {
-      setIsLoading(false);
-      console.error(`The error is ${err}`);
-      setSuccessMessage("");
-      setErrorMessage("Error fetching users from backend.");
+  const adminInfoNotification = () => {
+    toast.info(
+      `For demonstration purposes, administrator login information is listed below:
+      
+      username: admin
+      passsword: adminpassword`,
+      {
+        position: toast.POSITION.BOTTOM_LEFT,
+        autoClose: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: false,
+        enableHtml: true,
+      }
+    );
+  };
+
+  const toggleActiveButton = (index) => {
+    setRenderOptions({
+      ...renderOptions,
+      activeButton: renderOptions.choices[index],
+    });
+    setCurrentRender(renderChoices[index]);
+  };
+
+  const toggleActiveStyles = (index) => {
+    if (renderOptions.choices[index] === renderOptions.activeButton) {
+      return "box active";
+    } else {
+      return "box inactive";
     }
   };
 
-  const getAllRecipes = async () => {
-    setCurrentRender(renderChoices[1]);
-    const response = await fetch(
-      "https://recipe-mern-app-server.herokuapp.com/recipes",
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      }
-    );
-    const res = await response.json();
-    console.log(res);
-  };
-
   const sendRecipeToBackEnd = async () => {
-    for (const recipe of recipeArray) {
+    sendingNotification();
+    for (const recipe of recipesToBeSent) {
       console.log(recipe);
       try {
         await Axios.post(
@@ -186,16 +165,13 @@ const Home = ({ isLoggedIn, userInfo }) => {
               new Date().toTimeString().slice(9, 17),
           }
         ).then(() => {
-          setSuccessMessage("Recipes successfully added to the database.");
-          setErrorMessage("");
           console.log("Recipe successfully added to the database");
         });
       } catch (err) {
         console.error(`The error is ${err}`);
-        setErrorMessage("Some recipes already exist in the database.");
-        setSuccessMessage("");
       }
     }
+    sendingCompletedNotification();
   };
 
   const getRecipe = async () => {
@@ -203,6 +179,8 @@ const Home = ({ isLoggedIn, userInfo }) => {
     try {
       setIsLoading(true);
       setFetchingCompleted(false);
+      loadingNotification();
+
       for (let i = 65; i <= 90; i++) {
         await Axios.get(
           `https://www.themealdb.com/api/json/v1/1/search.php?f=${String.fromCharCode(
@@ -216,14 +194,9 @@ const Home = ({ isLoggedIn, userInfo }) => {
         });
       }
       console.log(arr);
-    } catch (err) {
-      console.log(`The error is ${err}`);
-    }
-    const concatArray = [].concat.apply([], arr);
-    concatArray.forEach((recipe) => {
-      setRecipeArray((recipeArray) => [
-        ...recipeArray,
-        {
+      const concatArray = [].concat.apply([], arr);
+      concatArray.forEach((recipe) => {
+        recipesToBeSent.push({
           idMeal: recipe.idMeal,
           strCategory: recipe.strCategory,
           strIngredient1: recipe.strIngredient1,
@@ -270,85 +243,103 @@ const Home = ({ isLoggedIn, userInfo }) => {
           strMeasure19: recipe.strMeasure19,
           strMeasure20: recipe.strMeasure20,
           strYoutube: recipe.strYoutube,
-        },
-      ]);
-    });
+        });
+      });
+      loadingCompletedNotification();
+      sendRecipeToBackEnd();
+    } catch (err) {
+      console.log(`The error is ${err}`);
+      errorNotification();
+    }
+
     console.log("Recipes successfully fetched.");
     setIsLoading(false);
     setFetchingCompleted(true);
   };
 
-  const displaySubmittedRecipes = () => {
-    setCurrentRender(renderChoices[2]);
-  };
-
   let renderResult;
 
   if (currentRender === renderChoices[0]) {
-    renderResult = usersList.length !== 0 && (
-      <Table
-        columns={columns}
-        data={usersList}
-        divContainerClassName="tableDivContainer"
-        tableClassName="tableContainer"
-      />
-    );
+    renderResult = <UsersList />;
   } else if (currentRender === renderChoices[1]) {
     renderResult = <AllRecipes />;
   } else if (currentRender === renderChoices[2]) {
     renderResult = <SubmittedRecipes />;
   }
 
+  //Notifications
+  let fetchingStatus;
+  let sendingStatus;
+
+  const errorNotification = () => {
+    toast.error("Error in fetching from TheMealDB API.", {
+      position: toast.POSITION.TOP_CENTER,
+      autoClose: 20000,
+    });
+  };
+
+  const loadingNotification = () => {
+    fetchingStatus = toast.loading("Fetching recipes...", {
+      position: toast.POSITION.TOP_RIGHT,
+    });
+  };
+
+  const loadingCompletedNotification = () => {
+    toast.update(fetchingStatus, {
+      render: "Recipes successfully fetched",
+      type: "Success",
+      type: "success",
+      isLoading: false,
+    });
+  };
+
+  const sendingNotification = () => {
+    sendingStatus = toast.loading("Sending fetched recipes to database.", {
+      position: toast.POSITION.TOP_RIGHT,
+    });
+  };
+
+  const sendingCompletedNotification = () => {
+    toast.update(sendingStatus, {
+      render: "Recipes successfully sent to database.",
+      type: "Success",
+      type: "success",
+      isLoading: false,
+    });
+  };
+
   return (
     <>
-      <div className="homePage">
-        {isLoggedIn ? (
-          <>
-            <h3> Welcome, {username} </h3>
-          </>
-        ) : (
-          <Loading source={"home"} />
-        )}
+      <StyledHomePage>
         {/* Authentication access for admin only */}
         {isLoggedIn && username === "admin" ? (
           <>
-            <div className="adminFunctions">
-              <button onClick={getAllUsers}>Users List</button>
-              <button onClick={getAllRecipes}>Recipes List</button>
-              <button onClick={displaySubmittedRecipes}>
-                Submitted Recipes
+            <StyledAdminFunctions>
+              {renderOptions.choices.map((choice, index) => (
+                <button
+                  className={toggleActiveStyles(index)}
+                  onClick={() => toggleActiveButton(index)}
+                  key={index}
+                >
+                  {choice.name}
+                </button>
+              ))}
+              <button className={"fetchButton"} onClick={getRecipe}>
+                Fetch recipes
               </button>
-              <button onClick={getRecipe}>Get recipes</button>
-              <button onClick={sendRecipeToBackEnd}>
-                Send recipe to backend
-              </button>
-            </div>
+            </StyledAdminFunctions>
 
-            <div className="loadingMessage">
-              {isLoading ? <div> Fetching in progress ... </div> : null}
-              {fetchingCompleted && <div> Fetching recipes completed </div>}
-            </div>
-
-            <div className="messages">
-              <div>{successMessage}</div>
-              <div>{errorMessage}</div>
-            </div>
+            {isLoading ? <div> Fetching in progress ... </div> : null}
+            {fetchingCompleted && <div> Fetching recipes completed </div>}
 
             {renderResult}
-            <Foco onClickOutside={() => setOpen(false)}>
-              <div className="portalContainer">
-                <RecipePortal
-                  isOpen={open}
-                  onClose={() => setOpen(false)}
-                  selectedRow={selectedRow}
-                  modalColumns={modalColumns}
-                />
-              </div>
-            </Foco>
           </>
-        ) : null}
+        ) : (
+          <UserHomePage userInfo={userInfo} isLoggedIn={isLoggedIn} />
+        )}
         <br />
-      </div>
+        <ToastContainer />
+      </StyledHomePage>
     </>
   );
 };

@@ -6,12 +6,32 @@ import AllRecipesPortal from "./AllRecipesPortal";
 import Foco from "react-foco";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import styled from "styled-components";
+
+const Button = styled.button`
+  cursor: pointer;
+  -webkit-box-shadow: 0px 0px 3px 0px #000000;
+  box-shadow: 0px 0px 3px -5px #000000;
+  border-radius: 5px;
+  min-height: 3em;
+`;
+
+const StyledViewButton = styled(Button)`
+  background-color: #264653;
+  color: white;
+  font-weight: bold;
+`;
+
+const StyledDenyButton = styled(Button)`
+  background-color: #e76f51;
+  color: white;
+  font-weight: bold;
+`;
 
 const AllRecipes = () => {
   const [recipesList, setRecipesList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [open, setOpen] = useState(false);
-  // const [modalState, setModalState] = useState(false);
   const [selectedRow, setSelectedRow] = useState([]);
 
   const columns = useMemo(
@@ -44,23 +64,17 @@ const AllRecipes = () => {
           {
             Header: "View",
             Cell: ({ row }) => (
-              <button
-                className="tableActionButton"
-                onClick={() => openPortal(row)}
-              >
+              <StyledViewButton onClick={() => openPortal(row)}>
                 View Recipe
-              </button>
+              </StyledViewButton>
             ),
           },
           {
             Header: "Delete",
             Cell: ({ row }) => (
-              <button
-                className="tableActionButton deny"
-                onClick={() => deleteRecipe(row)}
-              >
+              <StyledDenyButton onClick={() => deleteRecipe(row)}>
                 Delete
-              </button>
+              </StyledDenyButton>
             ),
           },
         ],
@@ -68,6 +82,26 @@ const AllRecipes = () => {
     ],
     []
   );
+
+  useEffect(() => {
+    const fetchRecipes = async () => {
+      dismissNotification();
+      setIsLoading(true);
+      try {
+        await Axios.get(
+          "https://recipe-mern-app-server.herokuapp.com/recipes"
+        ).then((res) => {
+          setRecipesList(res.data);
+          setIsLoading(false);
+        });
+      } catch (error) {
+        console.error(`The error is ${error}`);
+        setIsLoading(false);
+        errorNotification();
+      }
+    };
+    fetchRecipes();
+  }, []);
 
   const deleteRecipe = async (row) => {
     console.log(row.original);
@@ -80,44 +114,43 @@ const AllRecipes = () => {
         ).then((res) => {
           console.log(res.data);
           setRecipesList(res.data);
-          deleteNotification();
+          deleteSuccessNotification();
         });
       });
     } catch (error) {
       console.log(error);
+      deleteErrorNotification();
     }
   };
 
-  const deleteNotification = () => {
-    toast.info("Successfully deleted.", {
+  const deleteSuccessNotification = () => {
+    toast.success("Successfully deleted.", {
       position: toast.POSITION.TOP_CENTER,
+    });
+  };
+
+  const deleteErrorNotification = () => {
+    toast.error("Error deleting recipe.", {
+      position: toast.POSITION.TOP_CENTER,
+      autoClose: 15000,
     });
   };
 
   const openPortal = (row) => {
     setOpen(true);
-    // setModalState(true);
     setSelectedRow(row);
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setIsLoading(true);
-        await Axios.get(
-          "https://recipe-mern-app-server.herokuapp.com/recipes"
-        ).then((res) => {
-          console.log(res.data);
-          setRecipesList(res.data);
-          setIsLoading(false);
-        });
-      } catch (error) {
-        console.log(error);
-        setIsLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
+  const errorNotification = () => {
+    toast.error("Error fetching recipes from backend", {
+      position: toast.POSITION.TOP_CENTER,
+      autoClose: 15000,
+    });
+  };
+
+  const dismissNotification = () => {
+    toast.dismiss();
+  };
 
   return (
     <>
@@ -125,12 +158,7 @@ const AllRecipes = () => {
         <Loading source={"recipes"} />
       ) : (
         <>
-          <Table
-            columns={columns}
-            data={recipesList}
-            divContainerClassName="tableDivContainer"
-            tableClassName="tableContainer"
-          />{" "}
+          <Table columns={columns} data={recipesList} />
           <Foco onClickOutside={() => setOpen(false)}>
             <AllRecipesPortal
               isOpen={open}

@@ -1,3 +1,11 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import styled from "styled-components";
+
+const StyledTextInput = styled.input`
+  height: 2em;
+`;
+
 const SearchContainer = ({ recipeArray, setDisplayArray, setCurrentPage }) => {
   const handleTextOnChange = (e) => {
     filterArray(e.target.value);
@@ -15,13 +23,17 @@ const SearchContainer = ({ recipeArray, setDisplayArray, setCurrentPage }) => {
   };
 
   return (
-    <div className="searchContainer">
-      <label htmlFor="searchBar">Search: </label>
-      <input
-        className="textInput"
+    <div>
+      <label htmlFor="searchBar">
+        <FontAwesomeIcon icon={faSearch} />
+        &nbsp;
+      </label>
+
+      <StyledTextInput
         type="text"
         id="searchBar"
         onChange={handleTextOnChange}
+        placeholder="Search..."
       />
     </div>
   );

@@ -3,6 +3,129 @@ import { useState, useEffect } from "react";
 import Axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import styled from "styled-components";
+
+const StyledModalRecipeList = styled.li`
+  margin-bottom: 10px;
+`;
+
+const StyledModalInstructionList = styled.li`
+  line-height: 2em;
+  list-style: none;
+  display: inline;
+`;
+
+const StyledRecipesPortal = styled.div`
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: auto;
+  height: 0%;
+  top: 8%;
+  width: 75%;
+  overflow: scroll;
+`;
+
+const StyledModalBackground = styled.div`
+  width: 75%;
+  height: 90%;
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const StyledModalContainer = styled.div`
+  width: 100%;
+  height: 93%;
+  border-radius: 12px;
+  background-color: white;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
+    rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+  display: flex;
+  flex-direction: column;
+  padding: 25px;
+  overflow: scroll;
+`;
+
+const StyledModalButtonContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  background-color: #333;
+`;
+
+const Button = styled.button`
+  padding: 0.5em;
+  cursor: pointer;
+  color: white;
+  font-weight: bold;
+`;
+
+const CloseButton = styled(Button)`
+  background-color: #264653;
+`;
+
+const AddButton = styled(Button)`
+  background-color: #2a9d8f;
+`;
+
+const DeleteButton = styled(Button)`
+  background-color: #e76f51;
+`;
+
+const StyledModalHeader = styled.div`
+  display: grid;
+  grid-template-columns: 2fr 8fr;
+  column-gap: 1em;
+`;
+
+const StyledModalTitle = styled.div`
+  text-align: center;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
+    rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  border-radius: 0.25em;
+  overflow: hidden;
+`;
+
+const StyledModalName = styled.div`
+  margin: 0.2em;
+`;
+
+const StyledModalPicture = styled.div`
+  height: 100%;
+
+  & img {
+    max-height: 150px;
+    max-width: 150px;
+    min-width: 100%;
+    min-height: 100%;
+  }
+`;
+
+const StyledModalIngredientsContainer = styled.div`
+  padding-top: 1em;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
+    rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  border-radius: 0.25em;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  list-style-type: none;
+
+  & div {
+    padding-left: 1em;
+  }
+`;
+
+const StyledModalInstructions = styled.div`
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
+    rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+  padding: 1em;
+  border-radius: 0.25em;
+`;
 
 const RecipeItemModal = ({
   setModalState,
@@ -31,11 +154,7 @@ const RecipeItemModal = ({
   };
 
   const ingredientList = recipeIngredientList.map((list, index) => {
-    return (
-      <li className="modalRecipeList" key={index}>
-        {list}
-      </li>
-    );
+    return <StyledModalRecipeList key={index}>{list}</StyledModalRecipeList>;
   });
 
   let image;
@@ -57,11 +176,11 @@ const RecipeItemModal = ({
     instructionsList = instructions.map((list, index) => {
       return (
         <div key={index}>
-          <label className="modalLabel">
+          <label>
             <input type="checkBox" />
-            <li className="modalInstructionList" key={index}>
+            <StyledModalInstructionList key={index}>
               {list}
-            </li>
+            </StyledModalInstructionList>
           </label>
         </div>
       );
@@ -74,11 +193,11 @@ const RecipeItemModal = ({
         }
         return (
           <div key={index}>
-            <label className="modalLabel">
+            <label>
               <input type="checkBox" />
-              <li className="modalInstructionList" key={index}>
+              <StyledModalInstructionList key={index}>
                 {list}
-              </li>
+              </StyledModalInstructionList>
             </label>
           </div>
         );
@@ -236,52 +355,46 @@ const RecipeItemModal = ({
   };
 
   return ReactDOM.createPortal(
-    <div className="recipesPortal">
-      <div className="modalBackground">
-        <div className="modalContainer">
-          <div className="modalButtonContainer">
-            <div className="modalCloseButton">
-              <button onClick={() => setModalState(false)}>Close</button>
-            </div>
+    <StyledRecipesPortal>
+      <StyledModalBackground>
+        <StyledModalContainer>
+          <StyledModalButtonContainer>
+            <CloseButton onClick={() => setModalState(false)}>
+              Close
+            </CloseButton>
 
             {addOrDeleteButton === "add" ? (
-              <div className="modalCollectionAddButton">
-                <button onClick={addToCollection}>Add to my collections</button>
-              </div>
+              <AddButton onClick={addToCollection}>
+                Add to my collections
+              </AddButton>
             ) : (
-              <div className="modalCollectionDeleteButton">
-                <button onClick={deleteFromCollection}>
-                  Delete from my collections
-                </button>
-              </div>
+              <DeleteButton onClick={deleteFromCollection}>
+                Delete from my collections
+              </DeleteButton>
             )}
-          </div>
-          <div className="modalHeader">
-            <div className="modalTitle">
-              <div className="modalName">
-                <p>
-                  {name} <span> ({category})</span>
-                </p>
-              </div>
-              <div className="modalPicture">
-                <img src={image} alt="" />
-              </div>
-            </div>
-            <div className="modalIngredients">
-              <div className="modalIngredientsOne">{groups[0]}</div>
-              <div className="modalIngredientsTwo">{groups[1]}</div>
-              <div className="modalIngredientsThree">{groups[2]}</div>
-              <div className="modalIngredientsFour">{groups[3]}</div>
-            </div>
-          </div>
+          </StyledModalButtonContainer>
+          <StyledModalHeader>
+            <StyledModalTitle>
+              <StyledModalName>
+                {name} <span> ({category})</span>
+              </StyledModalName>
 
-          <div className="modalBody">
-            <div className="modalInstructions">{instructionsList}</div>
-          </div>
-        </div>
+              <StyledModalPicture>
+                <img src={image} alt="" />
+              </StyledModalPicture>
+            </StyledModalTitle>
+            <StyledModalIngredientsContainer>
+              <div>{groups[0]}</div>
+              <div>{groups[1]}</div>
+              <div>{groups[2]}</div>
+              <div>{groups[3]}</div>
+            </StyledModalIngredientsContainer>
+          </StyledModalHeader>
+          <StyledModalInstructions>{instructionsList}</StyledModalInstructions>
+        </StyledModalContainer>
         <ToastContainer />
-      </div>
-    </div>,
+      </StyledModalBackground>
+    </StyledRecipesPortal>,
     document.body
   );
 };

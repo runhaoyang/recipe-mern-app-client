@@ -5,9 +5,59 @@ import RecipeItem from "./RecipeItem";
 import Loading from "./Loading";
 import SearchContainer from "./SearchContainer";
 import RecipeItemModal from "./RecipeItemModal";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Foco from "react-foco";
+import styled from "styled-components";
+
+const StyledRecipesContainer = styled.div`
+  margin-top: 10px;
+  min-height: 40em;
+`;
+
+const StyledRecipeItems = styled.div`
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  column-gap: 3em;
+  row-gap: 1em;
+  min-height: 60px;
+
+  & img {
+    max-width: 100%;
+    max-height: 200px;
+    flex-shrink: 0;
+    min-width: 100%;
+    min-height: 100%;
+  }
+
+  & div {
+    text-align: center;
+  }
+`;
+
+const StyledPaginateContainer = styled.div`
+  .pagination {
+    display: flex;
+    padding-left: 0;
+    list-style: none;
+    box-shadow: rgb(0 0 0 / 40%) 0px 2px 4px, rgb(0 0 0 / 30%) 0px 7px 13px -3px,
+      rgb(0 0 0 / 20%) 0px -3px 0px inset;
+    background-color: #264653;
+    color: white;
+  }
+  .page-link {
+    padding: 0.5rem 1rem;
+    position: relative;
+    display: block;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .selected {
+    background-color: #2a9d8f;
+    color: white;
+  }
+`;
 
 const MyCollection = ({ setUserInfo, userInfo, userToken, isLoggedIn }) => {
   const [recipeArray, setRecipeArray] = useState([]);
@@ -26,8 +76,8 @@ const MyCollection = ({ setUserInfo, userInfo, userToken, isLoggedIn }) => {
     }
     const getUsersRecipes = async () => {
       try {
+        dismissNotification();
         setIsLoading(true);
-
         await Axios.post(
           "https://recipe-mern-app-server.herokuapp.com/users/recipes",
           {
@@ -41,10 +91,23 @@ const MyCollection = ({ setUserInfo, userInfo, userToken, isLoggedIn }) => {
         });
       } catch (err) {
         console.error(`The error is ${err}`);
+        errorNotification();
       }
     };
     getUsersRecipes();
   }, [userInfo]);
+
+  // Error notification
+  const errorNotification = () => {
+    toast.error("Error in fetching.", {
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 20000,
+    });
+  };
+
+  const dismissNotification = () => {
+    toast.dismiss();
+  };
 
   // Loading message for requiring login or currently fetching recipes
   let loadingMessage = "";
@@ -81,7 +144,7 @@ const MyCollection = ({ setUserInfo, userInfo, userToken, isLoggedIn }) => {
       {loadingMessage ? (
         <Loading source={loadingMessage} />
       ) : (
-        <div className="recipesContainer">
+        <StyledRecipesContainer>
           <Foco onClickOutside={() => setModalState(false)}>
             {modalState && (
               <RecipeItemModal
@@ -107,31 +170,33 @@ const MyCollection = ({ setUserInfo, userInfo, userToken, isLoggedIn }) => {
             <Loading source={"collectionsEmptyArray"} />
           ) : (
             <>
-              <div className="recipeItems">{recipes}</div>
+              <StyledRecipeItems>{recipes}</StyledRecipeItems>
               {!modalState && (
-                <ReactPaginate
-                  previousLabel={" <- Previous"}
-                  nextLabel={"Next ->"}
-                  pageCount={Math.ceil(displayArray.length / postsPerPage)}
-                  onPageChange={paginate}
-                  // React-Paginate starts at page 0, and we incremented by 1 in our onPageChange
-                  forcePage={currentPage - 1}
-                  pageClassName="page-item"
-                  pageLinkClassName="page-link"
-                  previousClassName="page-item"
-                  previousLinkClassName="page-link"
-                  nextClassName="page-item"
-                  nextLinkClassName="page-link"
-                  breakLabel="..."
-                  breakClassName="page-item"
-                  breakLinkClassName="page-link"
-                  containerClassName="pagination"
-                  activeClassName="selected"
-                />
+                <StyledPaginateContainer>
+                  <ReactPaginate
+                    previousLabel={" <- Previous"}
+                    nextLabel={"Next ->"}
+                    pageCount={Math.ceil(displayArray.length / postsPerPage)}
+                    onPageChange={paginate}
+                    // React-Paginate starts at page 0, and we incremented by 1 in our onPageChange
+                    forcePage={currentPage - 1}
+                    pageClassName="page-item"
+                    pageLinkClassName="page-link"
+                    previousClassName="page-item"
+                    previousLinkClassName="page-link"
+                    nextClassName="page-item"
+                    nextLinkClassName="page-link"
+                    breakLabel="..."
+                    breakClassName="page-item"
+                    breakLinkClassName="page-link"
+                    containerClassName="pagination"
+                    activeClassName="selected"
+                  />
+                </StyledPaginateContainer>
               )}
             </>
           )}
-        </div>
+        </StyledRecipesContainer>
       )}
       <ToastContainer />
     </>

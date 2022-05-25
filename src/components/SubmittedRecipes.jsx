@@ -1,10 +1,38 @@
 import Axios from "axios";
 import { useState, useEffect, useMemo } from "react";
 import Table from "./Table";
+import Loading from "./Loading";
 import SubmittedRecipesPortal from "./SubmittedRecipesPortal";
 import Foco from "react-foco";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import styled from "styled-components";
+
+const Button = styled.button`
+  cursor: pointer;
+  -webkit-box-shadow: 0px 0px 3px 0px #000000;
+  box-shadow: 0px 0px 3px -5px #000000;
+  border-radius: 5px;
+  min-height: 3em;
+`;
+
+const StyledViewButton = styled(Button)`
+  background-color: #264653;
+  color: white;
+  font-weight: bold;
+`;
+
+const StyledApproveButton = styled(Button)`
+  background-color: #2a9d8f;
+  color: white;
+  font-weight: bold;
+`;
+
+const StyledDenyButton = styled(Button)`
+  background-color: #e76f51;
+  color: white;
+  font-weight: bold;
+`;
 
 const SubmittedRecipes = () => {
   const [submittedRecipes, setSubmittedRecipes] = useState([]);
@@ -15,6 +43,7 @@ const SubmittedRecipes = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        dismissNotification();
         setIsLoading(true);
         await Axios.get(
           "https://recipe-mern-app-server.herokuapp.com/submittedRecipes"
@@ -60,36 +89,26 @@ const SubmittedRecipes = () => {
             Header: "View",
             Cell: ({ row }) => (
               <>
-                <button
-                  className="tableActionButton"
-                  onClick={() => openPortal(row)}
-                >
-                  View Recipe
-                </button>
+                <StyledViewButton onClick={() => openPortal(row)}>
+                  View Recipes
+                </StyledViewButton>
               </>
             ),
           },
           {
             Header: "Approve",
             Cell: ({ row }) => (
-              <button
-                onClick={() => approveRecipe(row)}
-                className="tableActionButton approve"
-              >
-                {" "}
-                Approve{" "}
-              </button>
+              <StyledApproveButton onClick={() => approveRecipe(row)}>
+                Approve
+              </StyledApproveButton>
             ),
           },
           {
             Header: "Deny",
             Cell: ({ row }) => (
-              <button
-                onClick={() => denyRecipe(row, true)}
-                className="tableActionButton deny"
-              >
-                Deny{" "}
-              </button>
+              <StyledDenyButton onClick={() => denyRecipe(row, true)}>
+                Deny
+              </StyledDenyButton>
             ),
           },
         ],
@@ -103,6 +122,7 @@ const SubmittedRecipes = () => {
     setSelectedRow(row);
   };
 
+  // Notifications
   const successNotification = () => {
     toast.success("Successfully added to recipes.", {
       position: toast.POSITION.TOP_CENTER,
@@ -114,6 +134,24 @@ const SubmittedRecipes = () => {
     toast.info("Successfully deleted.", {
       position: toast.POSITION.TOP_CENTER,
     });
+  };
+
+  const errorDeletingNotification = () => {
+    toast.error("Error in deleting recipe.", {
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 20000,
+    });
+  };
+
+  const errorApprovingNotification = () => {
+    toast.error("Error in approving recipe.", {
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 20000,
+    });
+  };
+
+  const dismissNotification = () => {
+    toast.dismiss();
   };
 
   const approveRecipe = async (row) => {
@@ -156,6 +194,7 @@ const SubmittedRecipes = () => {
       });
     } catch (err) {
       console.log(err);
+      errorApprovingNotification();
     }
   };
 
@@ -163,41 +202,36 @@ const SubmittedRecipes = () => {
     try {
       Axios.delete(
         `https://recipe-mern-app-server.herokuapp.com/submittedRecipes/delete/${row.original.idMeal}`
-      ).then(async () => {
-        try {
+      )
+        .then(async () => {
           if (display) {
             deleteNotification();
           }
-
           await Axios.get(
             "https://recipe-mern-app-server.herokuapp.com/submittedRecipes"
           ).then((res) => {
             console.log(res.data);
             setSubmittedRecipes(res.data);
           });
-        } catch (err) {
-          console.log(`The error is ${err}`);
-        }
-      });
-    } catch (err) {
-      console.log(err);
+        })
+        .catch((error) => {
+          console.log(error);
+          errorDeletingNotification();
+        });
+    } catch (error) {
+      console.log(error);
     }
   };
 
   return (
     <>
       {isLoading ? (
-        <div> Loading ... </div>
+        <Loading source="recipes" />
       ) : (
         <>
-          <Table
-            columns={columns}
-            data={submittedRecipes}
-            divContainerClassName="tableDivContainer"
-            tableClassName="tableContainer"
-          />
+          <Table columns={columns} data={submittedRecipes} />
 
-          <div className="portalContainer">
+          <div>
             <Foco onClickOutside={() => setOpen(false)}>
               <SubmittedRecipesPortal
                 isOpen={open}

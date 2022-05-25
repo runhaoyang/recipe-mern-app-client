@@ -9,6 +9,7 @@ const StyledContainer = styled.div`
   margin-bottom: 0px;
   margin-top: 10px;
   overflow: hidden;
+  min-height: 305px;
 `;
 
 const StyledName = styled.p`
@@ -30,12 +31,12 @@ const StyledLearnMoreButton = styled.div`
   & a {
     display: inline-block;
     text-decoration: none;
-    line-height: 40px;
+    line-height: 45px;
     color: white;
     background-color: #264653;
     font-weight: bold;
     width: 100%;
-    height: 100%;
+    height: 130%;
     box-sizing: border-box;
   }
 `;

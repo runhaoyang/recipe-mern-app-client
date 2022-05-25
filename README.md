@@ -1,4 +1,4 @@
-# Documentation
+# Recipe MERN App
 
 The frontend is hosted on netlify [Live Website](https://recipe-mern-app.netlify.app).  
 https://recipe-mern-app.netlify.app

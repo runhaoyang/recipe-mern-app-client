@@ -1,6 +1,6 @@
 # Documentation
 
-This project is hosted on netlify [Live Website](https://recipe-mern-app.netlify.app).  
+The frontend is hosted on netlify [Live Website](https://recipe-mern-app.netlify.app).  
 https://recipe-mern-app.netlify.app
 
 ## Administrator authorizations

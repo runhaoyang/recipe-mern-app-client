@@ -3,6 +3,9 @@
 The frontend is hosted on netlify [Live Website](https://recipe-mern-app.netlify.app).  
 https://recipe-mern-app.netlify.app
 
+The backend is hosted on heroku [Live Website](https://recipe-mern-app-server.herokuapp.com/).
+https://recipe-mern-app-server.herokuapp.com/
+
 This recipe management web application is built with the MERN stack.
 
 ## Administrator authorizations

@@ -72,8 +72,6 @@ const SubmittedRecipesPortal = ({ isOpen, onClose, selectedRow }) => {
 
   return ReactDOM.createPortal(
     <StyledPortal>
-      {console.log(selectedRow.original)}
-
       <StyledCloseButton onClick={onClose}>Close</StyledCloseButton>
       <StyledPortalContainer>
         <h3>

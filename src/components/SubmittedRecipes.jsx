@@ -48,7 +48,6 @@ const SubmittedRecipes = () => {
         await Axios.get(
           "https://recipe-mern-app-server.herokuapp.com/submittedRecipes"
         ).then((res) => {
-          console.log(res.data);
           setSubmittedRecipes(res.data);
           setIsLoading(false);
         });
@@ -186,11 +185,9 @@ const SubmittedRecipes = () => {
           "https://recipe-mern-app-server.herokuapp.com/recipes",
           sendData
         ).then((res) => {
-          console.log(res);
           successNotification();
           denyRecipe(row, false);
         });
-        console.log(sendData);
       });
     } catch (err) {
       console.log(err);
@@ -210,7 +207,6 @@ const SubmittedRecipes = () => {
           await Axios.get(
             "https://recipe-mern-app-server.herokuapp.com/submittedRecipes"
           ).then((res) => {
-            console.log(res.data);
             setSubmittedRecipes(res.data);
           });
         })

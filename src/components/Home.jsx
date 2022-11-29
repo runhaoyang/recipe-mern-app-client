@@ -252,7 +252,7 @@ const Home = ({ isLoggedIn, userInfo }) => {
       errorNotification();
     }
 
-    console.log("Recipes successfully fetched.");
+    console.log("Recipes successfully fetched");
     setIsLoading(false);
     setFetchingCompleted(true);
   };

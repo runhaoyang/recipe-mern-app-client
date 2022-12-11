@@ -145,6 +145,7 @@ const Recipes = ({ userInfo, setUserInfo, isLoggedIn, backendUrl }) => {
                 userInfo={userInfo}
                 setUserInfo={setUserInfo}
                 isLoggedIn={isLoggedIn}
+                backendUrl={backendUrl}
               />
             )}
           </Foco>

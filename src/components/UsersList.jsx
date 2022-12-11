@@ -87,7 +87,7 @@ const UsersList = () => {
       setIsLoading(true);
       try {
         await Axios.get(
-          "https://recipe-mern-app-server.herokuapp.com/users"
+          "https://recipe-mern-app-server.onrender.com/users"
         ).then((res) => {
           setUsersList(res.data);
           setIsLoading(false);

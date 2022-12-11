@@ -87,7 +87,7 @@ const Register = () => {
   const handleOnSubmitRegister = async (event) => {
     event.preventDefault();
     try {
-      await Axios.post("https://recipe-mern-app-server.herokuapp.com/users", {
+      await Axios.post("https://recipe-mern-app-server.onrender.com/users", {
         username: username,
         password: password,
       }).then(() => {

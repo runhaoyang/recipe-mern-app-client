@@ -75,7 +75,7 @@ const Recipes = ({ userInfo, setUserInfo, isLoggedIn }) => {
         dismissNotification();
         setIsLoading(true);
         await Axios.get(
-          "https://recipe-mern-app-server.herokuapp.com/recipes"
+          "https://recipe-mern-app-server.onrender.com/recipes"
         ).then(async (response) => {
           setRecipeArray(response.data);
           //Duplicate recipe array for modifications in other to retain prior data
@@ -85,7 +85,7 @@ const Recipes = ({ userInfo, setUserInfo, isLoggedIn }) => {
             return;
           }
           await Axios.post(
-            "https://recipe-mern-app-server.herokuapp.com/users/recipes",
+            "https://recipe-mern-app-server.onrender.com/users/recipes",
             {
               username: JSON.parse(localStorage.getItem("userInfo")).username,
             }

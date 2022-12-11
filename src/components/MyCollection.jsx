@@ -80,7 +80,7 @@ const MyCollection = ({ setUserInfo, userInfo, userToken, isLoggedIn }) => {
         dismissNotification();
         setIsLoading(true);
         await Axios.post(
-          "https://recipe-mern-app-server.herokuapp.com/users/recipes",
+          "https://recipe-mern-app-server.onrender.com/users/recipes",
           {
             username: userInfo.username,
           }

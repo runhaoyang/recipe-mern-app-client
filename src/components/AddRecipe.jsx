@@ -200,7 +200,7 @@ const AddRecipe = ({ userInfo, isLoggedIn }) => {
       const sendData = {};
       if (inputFile === null) {
         await Axios.get(
-          "https://recipe-mern-app-server.herokuapp.com/submittedRecipes/getLastId"
+          "https://recipe-mern-app-server.onrender.com/submittedRecipes/getLastId"
         ).then(async (res) => {
           sendData.lastId = parseInt(res.data) + 1;
           sendData.postedBy = userInfo.username;
@@ -217,7 +217,7 @@ const AddRecipe = ({ userInfo, isLoggedIn }) => {
           console.log(sendData);
 
           await Axios.post(
-            "https://recipe-mern-app-server.herokuapp.com/submittedRecipes/submit",
+            "https://recipe-mern-app-server.onrender.com/submittedRecipes/submit",
             sendData
           )
             .then((res) => {
@@ -242,7 +242,7 @@ const AddRecipe = ({ userInfo, isLoggedIn }) => {
             })
             .then(async () => {
               await Axios.get(
-                "https://recipe-mern-app-server.herokuapp.com/submittedRecipes/getLastId"
+                "https://recipe-mern-app-server.onrender.com/submittedRecipes/getLastId"
               ).then(async (res) => {
                 sendData.lastId = parseInt(res.data) + 1;
                 sendData.postedBy = userInfo.username;
@@ -261,7 +261,7 @@ const AddRecipe = ({ userInfo, isLoggedIn }) => {
                 console.log(sendData);
 
                 await Axios.post(
-                  "https://recipe-mern-app-server.herokuapp.com/submittedRecipes/submit",
+                  "https://recipe-mern-app-server.onrender.com/submittedRecipes/submit",
                   sendData
                 )
                   .then((res) => {

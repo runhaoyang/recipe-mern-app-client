@@ -46,7 +46,7 @@ const SubmittedRecipes = () => {
         dismissNotification();
         setIsLoading(true);
         await Axios.get(
-          "https://recipe-mern-app-server.herokuapp.com/submittedRecipes"
+          "https://recipe-mern-app-server.onrender.com/submittedRecipes"
         ).then((res) => {
           setSubmittedRecipes(res.data);
           setIsLoading(false);
@@ -157,7 +157,7 @@ const SubmittedRecipes = () => {
     try {
       console.log(row.original);
       await Axios.get(
-        "https://recipe-mern-app-server.herokuapp.com/recipes/getLastId"
+        "https://recipe-mern-app-server.onrender.com/recipes/getLastId"
       ).then(async (res) => {
         const sendData = {
           idMeal: parseInt(res.data) + 1,
@@ -182,7 +182,7 @@ const SubmittedRecipes = () => {
         });
 
         await Axios.post(
-          "https://recipe-mern-app-server.herokuapp.com/recipes",
+          "https://recipe-mern-app-server.onrender.com/recipes",
           sendData
         ).then((res) => {
           successNotification();
@@ -198,14 +198,14 @@ const SubmittedRecipes = () => {
   const denyRecipe = async (row, display) => {
     try {
       Axios.delete(
-        `https://recipe-mern-app-server.herokuapp.com/submittedRecipes/delete/${row.original.idMeal}`
+        `https://recipe-mern-app-server.onrender.com/submittedRecipes/delete/${row.original.idMeal}`
       )
         .then(async () => {
           if (display) {
             deleteNotification();
           }
           await Axios.get(
-            "https://recipe-mern-app-server.herokuapp.com/submittedRecipes"
+            "https://recipe-mern-app-server.onrender.com/submittedRecipes"
           ).then((res) => {
             setSubmittedRecipes(res.data);
           });

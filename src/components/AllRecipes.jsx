@@ -89,7 +89,7 @@ const AllRecipes = () => {
       setIsLoading(true);
       try {
         await Axios.get(
-          "https://recipe-mern-app-server.herokuapp.com/recipes"
+          "https://recipe-mern-app-server.onrender.com/recipes"
         ).then((res) => {
           setRecipesList(res.data);
           setIsLoading(false);
@@ -107,10 +107,10 @@ const AllRecipes = () => {
     console.log(row.original);
     try {
       await Axios.delete(
-        `https://recipe-mern-app-server.herokuapp.com/recipes/delete/${row.original.idMeal}`
+        `https://recipe-mern-app-server.onrender.com/recipes/delete/${row.original.idMeal}`
       ).then(async () => {
         await Axios.get(
-          "https://recipe-mern-app-server.herokuapp.com/recipes"
+          "https://recipe-mern-app-server.onrender.com/recipes"
         ).then((res) => {
           console.log(res.data);
           setRecipesList(res.data);

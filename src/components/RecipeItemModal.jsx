@@ -224,7 +224,7 @@ const RecipeItemModal = ({
     }
     try {
       await Axios.post(
-        "https://recipe-mern-app-server.herokuapp.com/recipes/exists",
+        "https://recipe-mern-app-server.onrender.com/recipes/exists",
         {
           username: userInfo.username,
           recipes: currentRecipe,
@@ -232,7 +232,7 @@ const RecipeItemModal = ({
       ).then(async (res) => {
         if (res.data === "doesNotExist") {
           await Axios.post(
-            "https://recipe-mern-app-server.herokuapp.com/recipes/save",
+            "https://recipe-mern-app-server.onrender.com/recipes/save",
             {
               username: userInfo.username,
               recipes: currentRecipe,
@@ -258,14 +258,14 @@ const RecipeItemModal = ({
     }
     try {
       await Axios.post(
-        "https://recipe-mern-app-server.herokuapp.com/recipes/delete",
+        "https://recipe-mern-app-server.onrender.com/recipes/delete",
         {
           username: userInfo.username,
           recipes: currentRecipe,
         }
       ).then(async () => {
         await Axios.post(
-          "https://recipe-mern-app-server.herokuapp.com/users/recipes",
+          "https://recipe-mern-app-server.onrender.com/users/recipes",
           {
             username: userInfo.username,
           }

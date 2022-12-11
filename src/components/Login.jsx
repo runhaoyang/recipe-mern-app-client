@@ -88,7 +88,7 @@ const Login = ({ setUserInfo, setUserToken, setIsLoggedIn, isLoggedIn }) => {
   const handleOnSubmitLogin = async (event) => {
     event.preventDefault();
     try {
-      await Axios.post("https://recipe-mern-app-server.herokuapp.com/auth", {
+      await Axios.post("https://recipe-mern-app-server.onrender.com/auth", {
         username: username,
         password: password,
       }).then((res) => {
@@ -114,7 +114,7 @@ const Login = ({ setUserInfo, setUserToken, setIsLoggedIn, isLoggedIn }) => {
         },
       };
       await Axios.get(
-        "https://recipe-mern-app-server.herokuapp.com/auth",
+        "https://recipe-mern-app-server.onrender.com/auth",
         data
       ).then((res) => {
         setUserInfo(res.data);

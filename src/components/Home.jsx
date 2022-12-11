@@ -110,7 +110,7 @@ const Home = ({ isLoggedIn, userInfo }) => {
       console.log(recipe);
       try {
         await Axios.post(
-          "https://recipe-mern-app-server.herokuapp.com/recipes",
+          "https://recipe-mern-app-server.onrender.com/recipes",
           {
             idMeal: recipe.idMeal,
             strCategory: recipe.strCategory,

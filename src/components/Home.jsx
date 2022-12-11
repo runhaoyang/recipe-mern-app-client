@@ -43,7 +43,7 @@ const StyledAdminFunctions = styled.div`
   }
 `;
 
-const Home = ({ isLoggedIn, userInfo }) => {
+const Home = ({ isLoggedIn, userInfo, backendUrl }) => {
   const [renderOptions, setRenderOptions] = useState({
     activeButton: null,
     choices: [
@@ -109,62 +109,59 @@ const Home = ({ isLoggedIn, userInfo }) => {
     for (const recipe of recipesToBeSent) {
       console.log(recipe);
       try {
-        await Axios.post(
-          "https://recipe-mern-app-server.onrender.com/recipes",
-          {
-            idMeal: recipe.idMeal,
-            strCategory: recipe.strCategory,
-            strIngredient1: recipe.strIngredient1,
-            strIngredient2: recipe.strIngredient2,
-            strIngredient3: recipe.strIngredient3,
-            strIngredient4: recipe.strIngredient4,
-            strIngredient5: recipe.strIngredient5,
-            strIngredient6: recipe.strIngredient6,
-            strIngredient7: recipe.strIngredient7,
-            strIngredient8: recipe.strIngredient8,
-            strIngredient9: recipe.strIngredient9,
-            strIngredient10: recipe.strIngredient10,
-            strIngredient11: recipe.strIngredient11,
-            strIngredient12: recipe.strIngredient12,
-            strIngredient13: recipe.strIngredient13,
-            strIngredient14: recipe.strIngredient14,
-            strIngredient15: recipe.strIngredient15,
-            strIngredient16: recipe.strIngredient16,
-            strIngredient17: recipe.strIngredient17,
-            strIngredient18: recipe.strIngredient17,
-            strIngredient19: recipe.strIngredient19,
-            strIngredient20: recipe.strIngredient20,
-            strInstructions: recipe.strInstructions,
-            strMeal: recipe.strMeal,
-            strMealThumb: recipe.strMealThumb,
-            strMeasure1: recipe.strMeasure1,
-            strMeasure2: recipe.strMeasure2,
-            strMeasure3: recipe.strMeasure3,
-            strMeasure4: recipe.strMeasure4,
-            strMeasure5: recipe.strMeasure5,
-            strMeasure6: recipe.strMeasure6,
-            strMeasure7: recipe.strMeasure7,
-            strMeasure8: recipe.strMeasure8,
-            strMeasure9: recipe.strMeasure9,
-            strMeasure10: recipe.strMeasure10,
-            strMeasure11: recipe.strMeasure11,
-            strMeasure12: recipe.strMeasure12,
-            strMeasure13: recipe.strMeasure13,
-            strMeasure14: recipe.strMeasure14,
-            strMeasure15: recipe.strMeasure15,
-            strMeasure16: recipe.strMeasure16,
-            strMeasure17: recipe.strMeasure17,
-            strMeasure18: recipe.strMeasure18,
-            strMeasure19: recipe.strMeasure19,
-            strMeasure20: recipe.strMeasure20,
-            strYoutube: recipe.strYoutube,
-            postedBy: "TheMealDB",
-            date:
-              new Date().toLocaleString([], { hour12: true }) +
-              " " +
-              new Date().toTimeString().slice(9, 17),
-          }
-        ).then(() => {
+        await Axios.post(`${backendUrl}/submittedRecipes/recipes`, {
+          idMeal: recipe.idMeal,
+          strCategory: recipe.strCategory,
+          strIngredient1: recipe.strIngredient1,
+          strIngredient2: recipe.strIngredient2,
+          strIngredient3: recipe.strIngredient3,
+          strIngredient4: recipe.strIngredient4,
+          strIngredient5: recipe.strIngredient5,
+          strIngredient6: recipe.strIngredient6,
+          strIngredient7: recipe.strIngredient7,
+          strIngredient8: recipe.strIngredient8,
+          strIngredient9: recipe.strIngredient9,
+          strIngredient10: recipe.strIngredient10,
+          strIngredient11: recipe.strIngredient11,
+          strIngredient12: recipe.strIngredient12,
+          strIngredient13: recipe.strIngredient13,
+          strIngredient14: recipe.strIngredient14,
+          strIngredient15: recipe.strIngredient15,
+          strIngredient16: recipe.strIngredient16,
+          strIngredient17: recipe.strIngredient17,
+          strIngredient18: recipe.strIngredient17,
+          strIngredient19: recipe.strIngredient19,
+          strIngredient20: recipe.strIngredient20,
+          strInstructions: recipe.strInstructions,
+          strMeal: recipe.strMeal,
+          strMealThumb: recipe.strMealThumb,
+          strMeasure1: recipe.strMeasure1,
+          strMeasure2: recipe.strMeasure2,
+          strMeasure3: recipe.strMeasure3,
+          strMeasure4: recipe.strMeasure4,
+          strMeasure5: recipe.strMeasure5,
+          strMeasure6: recipe.strMeasure6,
+          strMeasure7: recipe.strMeasure7,
+          strMeasure8: recipe.strMeasure8,
+          strMeasure9: recipe.strMeasure9,
+          strMeasure10: recipe.strMeasure10,
+          strMeasure11: recipe.strMeasure11,
+          strMeasure12: recipe.strMeasure12,
+          strMeasure13: recipe.strMeasure13,
+          strMeasure14: recipe.strMeasure14,
+          strMeasure15: recipe.strMeasure15,
+          strMeasure16: recipe.strMeasure16,
+          strMeasure17: recipe.strMeasure17,
+          strMeasure18: recipe.strMeasure18,
+          strMeasure19: recipe.strMeasure19,
+          strMeasure20: recipe.strMeasure20,
+          strYoutube: recipe.strYoutube,
+          postedBy: "TheMealDB",
+          date:
+            new Date().toLocaleString([], { hour12: true }) +
+            " " +
+            new Date().toTimeString().slice(9, 17),
+        }).then(() => {
           console.log("Recipe successfully added to the database");
         });
       } catch (err) {
@@ -260,11 +257,11 @@ const Home = ({ isLoggedIn, userInfo }) => {
   let renderResult;
 
   if (currentRender === renderChoices[0]) {
-    renderResult = <UsersList />;
+    renderResult = <UsersList backendUrl={backendUrl} />;
   } else if (currentRender === renderChoices[1]) {
-    renderResult = <AllRecipes />;
+    renderResult = <AllRecipes backendUrl={backendUrl} />;
   } else if (currentRender === renderChoices[2]) {
-    renderResult = <SubmittedRecipes />;
+    renderResult = <SubmittedRecipes backendUrl={backendUrl} />;
   }
 
   //Notifications

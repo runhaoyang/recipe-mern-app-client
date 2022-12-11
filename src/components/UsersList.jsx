@@ -22,7 +22,7 @@ const StyledViewButton = styled(Button)`
   font-weight: bold;
 `;
 
-const UsersList = () => {
+const UsersList = ({ backendUrl }) => {
   const [selectedRow, setSelectedRow] = useState([]);
   const [usersList, setUsersList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -86,9 +86,7 @@ const UsersList = () => {
       dismissNotification();
       setIsLoading(true);
       try {
-        await Axios.get(
-          "https://recipe-mern-app-server.onrender.com/users"
-        ).then((res) => {
+        await Axios.get(`${backendUrl}/users`).then((res) => {
           setUsersList(res.data);
           setIsLoading(false);
         });

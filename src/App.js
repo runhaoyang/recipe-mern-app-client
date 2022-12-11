@@ -102,6 +102,7 @@ const App = () => {
   const [userInfo, setUserInfo] = useState({});
   const [userToken, setUserToken] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState("");
+  const [backendUrl] = useState("https://recipe-mern-app-server.onrender.com");
 
   useEffect(() => {
     if (localStorage.getItem("userInfo")) {
@@ -113,11 +114,9 @@ const App = () => {
     }
 
     const fetchData = async () => {
-      // Initial call to backend to pre-load for faster loading to other components since the server is hosted on heroku which puts the app to sleep after 30minutes of inactivity
+      // Initial call to backend to pre-load for faster loading to other components
       try {
-        await Axios.get(
-          "https://recipe-mern-app-server.herokuapp.com/users"
-        ).then((res) => {
+        await Axios.get(`${backendUrl}/users`).then((res) => {
           console.log(res);
         });
       } catch (err) {
@@ -188,7 +187,13 @@ const App = () => {
             <Route
               exact
               path="/"
-              element={<Home isLoggedIn={isLoggedIn} userInfo={userInfo} />}
+              element={
+                <Home
+                  isLoggedIn={isLoggedIn}
+                  userInfo={userInfo}
+                  backendUrl={backendUrl}
+                />
+              }
             />
             <Route
               path="/recipes"
@@ -197,10 +202,14 @@ const App = () => {
                   userInfo={userInfo}
                   setUserInfo={setUserInfo}
                   isLoggedIn={isLoggedIn}
+                  backendUrl={backendUrl}
                 />
               }
             />
-            <Route path="/register" element={<Register />} />
+            <Route
+              path="/register"
+              element={<Register backendUrl={backendUrl} />}
+            />
             <Route
               path="/login"
               element={
@@ -209,6 +218,7 @@ const App = () => {
                   setUserToken={setUserToken}
                   setIsLoggedIn={setIsLoggedIn}
                   isLoggedIn={isLoggedIn}
+                  backendUrl={backendUrl}
                 />
               }
             />
@@ -224,13 +234,18 @@ const App = () => {
                   userInfo={userInfo}
                   userToken={userToken}
                   isLoggedIn={isLoggedIn}
+                  backendUrl={backendUrl}
                 />
               }
             />
             <Route
               path="/addrecipe"
               element={
-                <AddRecipe userInfo={userInfo} isLoggedIn={isLoggedIn} />
+                <AddRecipe
+                  userInfo={userInfo}
+                  isLoggedIn={isLoggedIn}
+                  backendUrl={backendUrl}
+                />
               }
             ></Route>
           </Routes>

@@ -138,6 +138,7 @@ const RecipeItemModal = ({
   currentPage,
   setCurrentPage,
   currentComponent,
+  backendUrl,
 }) => {
   const { strMeal: name, strCategory: category } = currentRecipe;
 
@@ -223,21 +224,15 @@ const RecipeItemModal = ({
       return;
     }
     try {
-      await Axios.post(
-        "https://recipe-mern-app-server.onrender.com/recipes/exists",
-        {
-          username: userInfo.username,
-          recipes: currentRecipe,
-        }
-      ).then(async (res) => {
+      await Axios.post(`${backendUrl}/recipes/exists`, {
+        username: userInfo.username,
+        recipes: currentRecipe,
+      }).then(async (res) => {
         if (res.data === "doesNotExist") {
-          await Axios.post(
-            "https://recipe-mern-app-server.onrender.com/recipes/save",
-            {
-              username: userInfo.username,
-              recipes: currentRecipe,
-            }
-          ).then((res) => {
+          await Axios.post(`${backendUrl}/recipes/save`, {
+            username: userInfo.username,
+            recipes: currentRecipe,
+          }).then((res) => {
             setUserInfo(res.data);
             successNotification();
             setAddOrDeleteButton("delete");
@@ -257,19 +252,13 @@ const RecipeItemModal = ({
       return;
     }
     try {
-      await Axios.post(
-        "https://recipe-mern-app-server.onrender.com/recipes/delete",
-        {
+      await Axios.post(`${backendUrl}/recipes/delete`, {
+        username: userInfo.username,
+        recipes: currentRecipe,
+      }).then(async () => {
+        await Axios.post(`${backendUrl}/users/recipes`, {
           username: userInfo.username,
-          recipes: currentRecipe,
-        }
-      ).then(async () => {
-        await Axios.post(
-          "https://recipe-mern-app-server.onrender.com/users/recipes",
-          {
-            username: userInfo.username,
-          }
-        ).then((res) => {
+        }).then((res) => {
           deleteNotification();
           setUserInfo(res.data);
           setAddOrDeleteButton("add");

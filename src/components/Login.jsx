@@ -52,7 +52,13 @@ const StyledButton = styled.button`
   box-sizing: border-box;
 `;
 
-const Login = ({ setUserInfo, setUserToken, setIsLoggedIn, isLoggedIn }) => {
+const Login = ({
+  setUserInfo,
+  setUserToken,
+  setIsLoggedIn,
+  isLoggedIn,
+  backendUrl,
+}) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -88,7 +94,7 @@ const Login = ({ setUserInfo, setUserToken, setIsLoggedIn, isLoggedIn }) => {
   const handleOnSubmitLogin = async (event) => {
     event.preventDefault();
     try {
-      await Axios.post("https://recipe-mern-app-server.onrender.com/auth", {
+      await Axios.post(`${backendUrl}/auth`, {
         username: username,
         password: password,
       }).then((res) => {
@@ -113,10 +119,7 @@ const Login = ({ setUserInfo, setUserToken, setIsLoggedIn, isLoggedIn }) => {
           "content-type": "application/json",
         },
       };
-      await Axios.get(
-        "https://recipe-mern-app-server.onrender.com/auth",
-        data
-      ).then((res) => {
+      await Axios.get(`${backendUrl}/auth`, data).then((res) => {
         setUserInfo(res.data);
         localStorage.setItem("userInfo", JSON.stringify(res.data));
       });

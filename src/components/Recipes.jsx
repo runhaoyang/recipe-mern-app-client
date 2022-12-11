@@ -60,7 +60,7 @@ const StyledPaginateContainer = styled.div`
   }
 `;
 
-const Recipes = ({ userInfo, setUserInfo, isLoggedIn }) => {
+const Recipes = ({ userInfo, setUserInfo, isLoggedIn, backendUrl }) => {
   const [recipeArray, setRecipeArray] = useState([]);
   const [displayArray, setDisplayArray] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -74,9 +74,7 @@ const Recipes = ({ userInfo, setUserInfo, isLoggedIn }) => {
       try {
         dismissNotification();
         setIsLoading(true);
-        await Axios.get(
-          "https://recipe-mern-app-server.onrender.com/recipes"
-        ).then(async (response) => {
+        await Axios.get(`${backendUrl}/recipes`).then(async (response) => {
           setRecipeArray(response.data);
           //Duplicate recipe array for modifications in other to retain prior data
           setDisplayArray(response.data);
@@ -84,12 +82,9 @@ const Recipes = ({ userInfo, setUserInfo, isLoggedIn }) => {
             setIsLoading(false);
             return;
           }
-          await Axios.post(
-            "https://recipe-mern-app-server.onrender.com/users/recipes",
-            {
-              username: JSON.parse(localStorage.getItem("userInfo")).username,
-            }
-          ).then((res) => {
+          await Axios.post(`${backendUrl}/users/recipes`, {
+            username: JSON.parse(localStorage.getItem("userInfo")).username,
+          }).then((res) => {
             setUserInfo(res.data);
             setIsLoading(false);
           });

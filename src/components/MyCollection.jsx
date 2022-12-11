@@ -60,7 +60,13 @@ const StyledPaginateContainer = styled.div`
   }
 `;
 
-const MyCollection = ({ setUserInfo, userInfo, userToken, isLoggedIn }) => {
+const MyCollection = ({
+  setUserInfo,
+  userInfo,
+  userToken,
+  isLoggedIn,
+  backendUrl,
+}) => {
   const [recipeArray, setRecipeArray] = useState([]);
   const [displayArray, setDisplayArray] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -79,12 +85,9 @@ const MyCollection = ({ setUserInfo, userInfo, userToken, isLoggedIn }) => {
       try {
         dismissNotification();
         setIsLoading(true);
-        await Axios.post(
-          "https://recipe-mern-app-server.onrender.com/users/recipes",
-          {
-            username: userInfo.username,
-          }
-        ).then((response) => {
+        await Axios.post(`${backendUrl}/users/recipes`, {
+          username: userInfo.username,
+        }).then((response) => {
           setRecipeArray(response.data.recipes);
           setDisplayArray(response.data.recipes);
           setUsersCollection(response.data);
@@ -159,6 +162,7 @@ const MyCollection = ({ setUserInfo, userInfo, userToken, isLoggedIn }) => {
                 currentPage={currentPage}
                 setCurrentPage={setCurrentPage}
                 currentComponent={currentComponent}
+                backendUrl={backendUrl}
               />
             )}
           </Foco>

@@ -93,7 +93,7 @@ const StyledInputLabel = styled.label`
   color: #ffffff;
 `;
 
-const AddRecipe = ({ userInfo, isLoggedIn }) => {
+const AddRecipe = ({ userInfo, isLoggedIn, backendUrl }) => {
   const [recipeName, setRecipeName] = useState("");
   const [recipeCategory, setRecipeCategory] = useState("");
   // Number of ingredients and quantity input to display
@@ -199,40 +199,37 @@ const AddRecipe = ({ userInfo, isLoggedIn }) => {
     try {
       const sendData = {};
       if (inputFile === null) {
-        await Axios.get(
-          "https://recipe-mern-app-server.onrender.com/submittedRecipes/getLastId"
-        ).then(async (res) => {
-          sendData.lastId = parseInt(res.data) + 1;
-          sendData.postedBy = userInfo.username;
-          sendData.recipeName = nameRef.current.value;
-          sendData.recipeCategory = categoryRef.current.value;
-          sendData.ingredientList = JSON.stringify(ingredientList);
-          sendData.quantityList = JSON.stringify(quantityList);
-          sendData.instructions = JSON.stringify(instructionsList);
-          sendData.date =
-            new Date().toLocaleString([], { hour12: true }) +
-            " " +
-            new Date().toTimeString().slice(9, 17);
-          console.log("sendData: ");
-          console.log(sendData);
+        await Axios.get(`${backendUrl}/submittedRecipes/getLastId`).then(
+          async (res) => {
+            sendData.lastId = parseInt(res.data) + 1;
+            sendData.postedBy = userInfo.username;
+            sendData.recipeName = nameRef.current.value;
+            sendData.recipeCategory = categoryRef.current.value;
+            sendData.ingredientList = JSON.stringify(ingredientList);
+            sendData.quantityList = JSON.stringify(quantityList);
+            sendData.instructions = JSON.stringify(instructionsList);
+            sendData.date =
+              new Date().toLocaleString([], { hour12: true }) +
+              " " +
+              new Date().toTimeString().slice(9, 17);
+            console.log("sendData: ");
+            console.log(sendData);
 
-          await Axios.post(
-            "https://recipe-mern-app-server.onrender.com/submittedRecipes/submit",
-            sendData
-          )
-            .then((res) => {
-              console.log(res);
-              // Clear all fields
-              formRef.current.reset();
-              resetInputFields();
-              successNotification();
-            })
-            .catch((error) => {
-              console.log(error);
-              errorNotification();
-              console.log("line 122");
-            });
-        });
+            await Axios.post(`${backendUrl}/submittedRecipes/submit`, sendData)
+              .then((res) => {
+                console.log(res);
+                // Clear all fields
+                formRef.current.reset();
+                resetInputFields();
+                successNotification();
+              })
+              .catch((error) => {
+                console.log(error);
+                errorNotification();
+                console.log("line 122");
+              });
+          }
+        );
       } else {
         const imageRef = ref(storage, inputFile.name);
         uploadBytes(imageRef, inputFile).then(() => {
@@ -241,42 +238,42 @@ const AddRecipe = ({ userInfo, isLoggedIn }) => {
               sendData.filePath = url;
             })
             .then(async () => {
-              await Axios.get(
-                "https://recipe-mern-app-server.onrender.com/submittedRecipes/getLastId"
-              ).then(async (res) => {
-                sendData.lastId = parseInt(res.data) + 1;
-                sendData.postedBy = userInfo.username;
-                sendData.recipeName = nameRef.current.value;
-                sendData.recipeCategory = categoryRef.current.value;
-                sendData.ingredientList = JSON.stringify(ingredientList);
-                sendData.quantityList = JSON.stringify(quantityList);
-                sendData.instructions = JSON.stringify(instructionsList);
-                sendData.date =
-                  new Date().toLocaleString([], { hour12: true }) +
-                  " " +
-                  new Date().toTimeString().slice(9, 17);
-                sendData.fileName = inputFile.name;
-                sendData.fileType = inputFile.type;
-                console.log("sendData: ");
-                console.log(sendData);
+              await Axios.get(`${backendUrl}/submittedRecipes/getLastId`).then(
+                async (res) => {
+                  sendData.lastId = parseInt(res.data) + 1;
+                  sendData.postedBy = userInfo.username;
+                  sendData.recipeName = nameRef.current.value;
+                  sendData.recipeCategory = categoryRef.current.value;
+                  sendData.ingredientList = JSON.stringify(ingredientList);
+                  sendData.quantityList = JSON.stringify(quantityList);
+                  sendData.instructions = JSON.stringify(instructionsList);
+                  sendData.date =
+                    new Date().toLocaleString([], { hour12: true }) +
+                    " " +
+                    new Date().toTimeString().slice(9, 17);
+                  sendData.fileName = inputFile.name;
+                  sendData.fileType = inputFile.type;
+                  console.log("sendData: ");
+                  console.log(sendData);
 
-                await Axios.post(
-                  "https://recipe-mern-app-server.onrender.com/submittedRecipes/submit",
-                  sendData
-                )
-                  .then((res) => {
-                    console.log(res);
-                    // Clear all fields
-                    formRef.current.reset();
-                    resetInputFields();
-                    successNotification();
-                  })
-                  .catch((error) => {
-                    console.log(error);
-                    errorNotification();
-                    console.log("line 166");
-                  });
-              });
+                  await Axios.post(
+                    `${backendUrl}/submittedRecipes/submit`,
+                    sendData
+                  )
+                    .then((res) => {
+                      console.log(res);
+                      // Clear all fields
+                      formRef.current.reset();
+                      resetInputFields();
+                      successNotification();
+                    })
+                    .catch((error) => {
+                      console.log(error);
+                      errorNotification();
+                      console.log("line 166");
+                    });
+                }
+              );
             })
             .catch((error) => {
               console.log(error);

@@ -34,7 +34,7 @@ const StyledDenyButton = styled(Button)`
   font-weight: bold;
 `;
 
-const SubmittedRecipes = () => {
+const SubmittedRecipes = ({ backendUrl }) => {
   const [submittedRecipes, setSubmittedRecipes] = useState([]);
   const [isLoading, setIsLoading] = useState();
   const [open, setOpen] = useState(false);
@@ -45,9 +45,7 @@ const SubmittedRecipes = () => {
       try {
         dismissNotification();
         setIsLoading(true);
-        await Axios.get(
-          "https://recipe-mern-app-server.onrender.com/submittedRecipes"
-        ).then((res) => {
+        await Axios.get(`${backendUrl}/submittedRecipes`).then((res) => {
           setSubmittedRecipes(res.data);
           setIsLoading(false);
         });
@@ -156,9 +154,7 @@ const SubmittedRecipes = () => {
   const approveRecipe = async (row) => {
     try {
       console.log(row.original);
-      await Axios.get(
-        "https://recipe-mern-app-server.onrender.com/recipes/getLastId"
-      ).then(async (res) => {
+      await Axios.get(`${backendUrl}/recipes/getLastId`).then(async (res) => {
         const sendData = {
           idMeal: parseInt(res.data) + 1,
           strCategory: row.original.strCategory,
@@ -181,10 +177,7 @@ const SubmittedRecipes = () => {
           sendData[`strMeasure${index + 1}`] = quantity;
         });
 
-        await Axios.post(
-          "https://recipe-mern-app-server.onrender.com/recipes",
-          sendData
-        ).then((res) => {
+        await Axios.post(`${backendUrl}/recipes`, sendData).then((res) => {
           successNotification();
           denyRecipe(row, false);
         });
@@ -198,15 +191,13 @@ const SubmittedRecipes = () => {
   const denyRecipe = async (row, display) => {
     try {
       Axios.delete(
-        `https://recipe-mern-app-server.onrender.com/submittedRecipes/delete/${row.original.idMeal}`
+        `${backendUrl}/submittedRecipes/delete/${row.original.idMeal}`
       )
         .then(async () => {
           if (display) {
             deleteNotification();
           }
-          await Axios.get(
-            "https://recipe-mern-app-server.onrender.com/submittedRecipes"
-          ).then((res) => {
+          await Axios.get(`${backendUrl}/submittedRecipes`).then((res) => {
             setSubmittedRecipes(res.data);
           });
         })

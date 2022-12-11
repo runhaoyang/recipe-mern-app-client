@@ -51,7 +51,7 @@ const StyledButton = styled.button`
   box-sizing: border-box;
 `;
 
-const Register = () => {
+const Register = ({ backendUrl }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -87,7 +87,7 @@ const Register = () => {
   const handleOnSubmitRegister = async (event) => {
     event.preventDefault();
     try {
-      await Axios.post("https://recipe-mern-app-server.onrender.com/users", {
+      await Axios.post(`${backendUrl}/users`, {
         username: username,
         password: password,
       }).then(() => {

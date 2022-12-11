@@ -28,7 +28,7 @@ const StyledDenyButton = styled(Button)`
   font-weight: bold;
 `;
 
-const AllRecipes = () => {
+const AllRecipes = ({ backendUrl }) => {
   const [recipesList, setRecipesList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [open, setOpen] = useState(false);
@@ -88,9 +88,7 @@ const AllRecipes = () => {
       dismissNotification();
       setIsLoading(true);
       try {
-        await Axios.get(
-          "https://recipe-mern-app-server.onrender.com/recipes"
-        ).then((res) => {
+        await Axios.get(`${backendUrl}/recipes`).then((res) => {
           setRecipesList(res.data);
           setIsLoading(false);
         });
@@ -107,11 +105,9 @@ const AllRecipes = () => {
     console.log(row.original);
     try {
       await Axios.delete(
-        `https://recipe-mern-app-server.onrender.com/recipes/delete/${row.original.idMeal}`
+        `${backendUrl}/recipes/delete/${row.original.idMeal}`
       ).then(async () => {
-        await Axios.get(
-          "https://recipe-mern-app-server.onrender.com/recipes"
-        ).then((res) => {
+        await Axios.get(`${backendUrl}/recipes`).then((res) => {
           console.log(res.data);
           setRecipesList(res.data);
           deleteSuccessNotification();
